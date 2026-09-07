@@ -52,12 +52,12 @@ export const projects: Project[] = [
     demo: 'https://arboretum-invasive-species.onrender.com',
   },
   {
-    title: 'Hisab — Personal Finance Tracker for Nepal',
+    title: 'Rasuwa Transboundary Flood',
     description:
-      'Self-hosted personal finance app tailored for Nepal. Tracks income and expenses, manages bank and wallet ledgers, monitors NEPSE stock portfolios with live pricing, and supports savings goals and monthly budgets. Includes Nepal-specific features: lakh-based formatting, UTC+5:45 timezone, and NEPSE market calendar integration.',
-    technologies: ['Next.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Material-UI', 'Recharts', 'Docker'],
-    github: 'https://github.com/bikal3/hisab-demo',
-    demo: 'https://hisab-demo.vercel.app',
+      'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
+    technologies: ['Google Earth Engine', 'Sentinel-1/2', 'Python', 'React', 'SRTM', 'Cloudflare Pages'],
+    github: 'https://github.com/bikal3/rasuwa-flood',
+    demo: 'https://rasuwaflood.bikal3.com.np',
   },
   {
     title: 'MappingAfrica — Satellite Agricultural Field Segmentation',

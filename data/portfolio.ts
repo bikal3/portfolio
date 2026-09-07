@@ -13,6 +13,14 @@ interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Rasuwa Transboundary Flood',
+    description:
+      'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
+    technologies: ['Google Earth Engine', 'Sentinel-1/2', 'Python', 'React', 'SRTM', 'Cloudflare Pages'],
+    github: 'https://github.com/bikal3/rasuwa-flood',
+    demo: 'https://rasuwaflood.bikal3.com.np',
+  },
+  {
     title: 'BhumiScan — Earth-Embedding Search for Nepal',
     description:
       'Country-scale visual search over Nepal’s landscape. Click any location — a glacial lake, a terraced hillside — and retrieve the most similar places nationwide from 22,676 Clay v1.5 Sentinel-2 embedding cells. Detects 2020→2025 land change scored by cloud-penetrating Sentinel-1 radar, so monsoon haze cannot fake a hotspot, with a cloud-free before/after imagery swipe. Scores 73.7% macro precision@10 against ESA WorldCover labels, a 5.9× lift over the random baseline, and runs entirely client-side with no backend or vector database.',
@@ -50,14 +58,6 @@ export const projects: Project[] = [
     technologies: ['Python', 'Flask', 'Chart.js', 'Jupyter', 'pandas', 'GIS', 'JavaScript'],
     github: 'https://github.com/bikal3/arboretum-invasive-species',
     demo: 'https://arboretum-invasive-species.onrender.com',
-  },
-  {
-    title: 'Rasuwa Transboundary Flood',
-    description:
-      'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
-    technologies: ['Google Earth Engine', 'Sentinel-1/2', 'Python', 'React', 'SRTM', 'Cloudflare Pages'],
-    github: 'https://github.com/bikal3/rasuwa-flood',
-    demo: 'https://rasuwaflood.bikal3.com.np',
   },
   {
     title: 'MappingAfrica — Satellite Agricultural Field Segmentation',

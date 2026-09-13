@@ -21,9 +21,9 @@ export const projects: Project[] = [
     demo: 'https://rasuwaflood.bikal3.com.np',
   },
   {
-    title: 'BhumiScan — Earth-Embedding Search for Nepal',
+    title: 'BhumiScan: Earth-Embedding Search for Nepal',
     description:
-      'Country-scale visual search over Nepal’s landscape. Click any location — a glacial lake, a terraced hillside — and retrieve the most similar places nationwide from 22,676 Clay v1.5 Sentinel-2 embedding cells. Detects 2020→2025 land change scored by cloud-penetrating Sentinel-1 radar, so monsoon haze cannot fake a hotspot, with a cloud-free before/after imagery swipe. Scores 73.7% macro precision@10 against ESA WorldCover labels, a 5.9× lift over the random baseline, and runs entirely client-side with no backend or vector database.',
+      'Country-scale visual search over Nepal’s landscape. Click any location (a glacial lake, a terraced hillside) and retrieve the most similar places nationwide from 22,676 Clay v1.5 Sentinel-2 embedding cells. Detects 2020→2025 land change scored by cloud-penetrating Sentinel-1 radar, so monsoon haze cannot fake a hotspot, with a cloud-free before/after imagery swipe. Scores 73.7% macro precision@10 against ESA WorldCover labels, a 5.9× lift over the random baseline, and runs entirely client-side with no backend or vector database.',
     technologies: ['Next.js', 'TypeScript', 'MapLibre GL', 'Clay v1.5', 'Sentinel-1/2', 'DuckDB', 'Python', 'Cloudflare R2'],
     demo: 'https://bhumiscan.bikal3.com.np/',
   },
@@ -52,7 +52,7 @@ export const projects: Project[] = [
     demo: 'https://bikal3.github.io/peru-wildfire/',
   },
   {
-    title: 'Mapping Invasive Species — Hadwen Arboretum',
+    title: 'Mapping Invasive Species: Hadwen Arboretum',
     description:
       'Interactive web app presenting a GIS-based survey of invasive plants across 26 acres of the Hadwen Arboretum in Worcester, MA. Reveals that 42.6% of the arboretum contains at least one invasive species, with five-chapter narrative storytelling, species density maps, a threat index, and a management effort estimator.',
     technologies: ['Python', 'Flask', 'Chart.js', 'Jupyter', 'pandas', 'GIS', 'JavaScript'],
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     demo: 'https://arboretum-invasive-species.onrender.com',
   },
   {
-    title: 'MappingAfrica — Satellite Agricultural Field Segmentation',
+    title: 'MappingAfrica: Satellite Agricultural Field Segmentation',
     description:
       'Implements semantic segmentation of farmland across Zambia using a UNet architecture trained on multi-spectral satellite imagery. Achieves 81.79% pixel accuracy and 43.31% mIoU on the MappingAfrica v2.0.0 dataset. Includes an interactive demo for running inference in the browser.',
     technologies: ['PyTorch', 'UNet', 'FastAPI', 'React', 'Vite', 'rasterio', 'NumPy'],

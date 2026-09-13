@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   // `opengraph-image` and `twitter-image` file conventions in this directory,
   // so the declared size can never drift from the actual file.
   openGraph: {
-    title: 'Bikal Shrestha — Spatial Data Analyst & Data Scientist',
+    title: 'Bikal Shrestha | Spatial Data Analyst & Data Scientist',
     description: DESCRIPTION,
     url: '/',
     siteName: 'Bikal Shrestha',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bikal Shrestha — Spatial Data Analyst & Data Scientist',
+    title: 'Bikal Shrestha | Spatial Data Analyst & Data Scientist',
     description: DESCRIPTION,
   },
 }

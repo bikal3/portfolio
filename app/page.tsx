@@ -12,7 +12,7 @@ export default function HomePage() {
         screen-reader heading navigation.
       */}
       <h1 className="sr-only">
-        Bikal Shrestha — Spatial Data Analyst and Data Scientist
+        Bikal Shrestha, Spatial Data Analyst and Data Scientist
       </h1>
       <About />
       <Projects />

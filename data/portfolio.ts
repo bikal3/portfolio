@@ -14,7 +14,7 @@ interface Project {
   demo?: string
 }
 
-export const projects: Project[] = [
+const PROJECTS: Project[] = [
   {
     title: 'Rasuwa Transboundary Flood',
     date: 'Aug 2026',
@@ -87,6 +87,28 @@ export const projects: Project[] = [
     demo: 'https://himalayaglof.bikal3.com.np/',
   },
 ]
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/**
+ * 'Aug 2026' -> a comparable month number. Throws rather than sorting a typo
+ * silently to the bottom: this runs at build time, so a bad date fails the
+ * build instead of quietly reordering the page.
+ */
+function monthKey(date: string): number {
+  const [month, year] = date.split(' ')
+  const index = MONTHS.indexOf(month)
+  if (index < 0 || !/^\d{4}$/.test(year)) {
+    throw new Error(`portfolio: project date must be 'MMM YYYY', got '${date}'`)
+  }
+  return Number(year) * 12 + index
+}
+
+// Sorted here, not in the component, so adding a project means appending to
+// PROJECTS in any order and letting its date decide where it lands.
+export const projects: Project[] = [...PROJECTS].sort(
+  (a, b) => monthKey(b.date) - monthKey(a.date)
+)
 
 export const education = [
   {

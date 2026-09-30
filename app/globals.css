@@ -16,9 +16,10 @@
   /* Dark value is #7f7f7f, not a dimmer grey: #666666 scored 3.34:1 on the
      page background, under the 4.5:1 WCAG AA floor for text this size. */
   --color-text-faint: light-dark(#6e6e6e, #7f7f7f);
-  --color-accent: light-dark(#1f6d8c, #6aafc7);
+  --color-accent: light-dark(#1b5e7e, #7cb8d4);
   --color-accent-bg: light-dark(#e6f1f6, #0d1e2a);
-  --font-family-sans: var(--font-inter), sans-serif;
+  --font-family-serif: var(--font-serif), Georgia, serif;
+  --font-family-mono: var(--font-mono), ui-monospace, monospace;
 }
 
 html {
@@ -30,6 +31,12 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text-body);
+}
+
+body {
+  font-family: var(--font-family-serif);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 /*

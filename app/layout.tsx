@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { IBM_Plex_Mono, Newsreader } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import BackToTop from '@/components/BackToTop'
@@ -9,7 +9,18 @@ import Footer from '@/components/Footer'
 import profileImg from '@/data/profile.webp'
 import { profile } from '@/data/profile'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const serif = Newsreader({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+})
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
+})
 
 const SITE_URL = 'https://bikal3.com.np'
 const DESCRIPTION =
@@ -80,7 +91,7 @@ export default function RootLayout({
   // then. suppressHydrationWarning covers this element's own attributes only --
   // it does not reach any child -- which is exactly the disagreement we create.
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${serif.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className="bg-bg text-text-body antialiased">
         {/*
           Runs synchronously before the body paints, so a stored choice is
@@ -108,7 +119,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="max-w-[53rem] mx-auto flex min-h-screen">
+        <div className="max-w-[58rem] mx-auto flex min-h-screen">
           <Navbar />
           <main
             id="main-content"
@@ -127,7 +138,7 @@ export default function RootLayout({
           wide screen. The wrapper ignores pointer events so it does not sit
           over the content it spans.
         */}
-        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden max-w-[53rem] justify-end px-10 md:flex">
+        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden max-w-[58rem] justify-end px-10 md:flex">
           <ThemeToggle className="pointer-events-auto block" />
         </div>
       </body>

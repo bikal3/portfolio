@@ -11,14 +11,14 @@ import { profile } from '@/data/profile'
 
 const serif = Newsreader({
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-newsreader',
   display: 'swap',
 })
 
 const mono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
-  variable: '--font-mono',
+  variable: '--font-plex-mono',
   display: 'swap',
 })
 
@@ -119,7 +119,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="max-w-[58rem] mx-auto flex min-h-screen">
+        <div className="max-w-[53rem] mx-auto flex min-h-screen">
           <Navbar />
           <main
             id="main-content"
@@ -138,7 +138,7 @@ export default function RootLayout({
           wide screen. The wrapper ignores pointer events so it does not sit
           over the content it spans.
         */}
-        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden max-w-[58rem] justify-end px-10 md:flex">
+        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden max-w-[53rem] justify-end px-10 md:flex">
           <ThemeToggle className="pointer-events-auto block" />
         </div>
       </body>

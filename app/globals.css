@@ -51,6 +51,7 @@ body {
     linear-gradient(var(--color-graticule) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-graticule) 1px, transparent 1px);
   background-size: 32px 32px;
+  background-position-x: 50%;
 }
 
 /*

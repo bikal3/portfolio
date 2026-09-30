@@ -63,6 +63,18 @@ check('global focus ring', outlines(':focus-visible').some((v) => !invisible(v))
 check('main opts out of ring', outlines('main:focus-visible').some((v) => invisible(v)))
 check('reduced motion honoured', css.includes('prefers-reduced-motion'))
 check('no per-block measure caps', !/max-w-\[\d+ch\]/.test(dom))
+
+// Task 3 keeps the graticule out from under text by making the page wrapper
+// opaque. Lose either half and the grid returns behind every line of body
+// text, where faint text measures 4.09:1 light and 4.11:1 dark -- under AA.
+check(
+  'body keeps its background colour',
+  rules.filter((r) => r.selectors.includes('body')).some((r) => /background-color\s*:/.test(r.body))
+)
+check(
+  'page wrapper is opaque',
+  /class="[^"]*\bbg-bg\b[^"]*max-w-\[51rem\]|class="[^"]*max-w-\[51rem\][^"]*\bbg-bg\b/.test(dom)
+)
 check('canonical present', /<link[^>]+rel="canonical"/.test(dom))
 check('JSON-LD present', /<script[^>]+type="application\/ld\+json"/.test(html))
 check(

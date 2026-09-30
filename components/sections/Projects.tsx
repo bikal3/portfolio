@@ -43,6 +43,7 @@ export default function Projects() {
                   project.title
                 )}
               </h3>
+              <p className="text-text-faint text-xs mb-2">{project.date}</p>
               <p className="text-text-muted text-sm leading-relaxed mb-3 max-w-[68ch]">
                 {project.description}
               </p>

@@ -52,7 +52,7 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
   return (
     <button
       onClick={toggle}
-      className={`theme-toggle relative h-6 w-12 shrink-0 rounded-full border border-border-strong bg-surface transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${className}`}
+      className={`theme-toggle relative h-6 w-12 shrink-0 rounded-full border border-border-strong bg-surface transition-colors hover:border-accent ${className}`}
     >
       <span data-when="dark" className="sr-only">
         Light theme

@@ -1,9 +1,10 @@
 // components/sections/Contact.tsx
 import SectionLabel from '@/components/ui/SectionLabel'
+import { profile } from '@/data/profile'
 
 const LINKS = [
-  { label: 'GitHub', href: 'https://github.com/bikal3', external: true },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/shresthabikal/', external: true },
+  { label: 'GitHub', href: profile.github },
+  { label: 'LinkedIn', href: profile.linkedin },
 ] as const
 
 export default function Contact() {
@@ -15,10 +16,10 @@ export default function Contact() {
     >
       <SectionLabel id="contact-heading">Contact</SectionLabel>
       <a
-        href="mailto:bikal3.bs@gmail.com"
+        href={`mailto:${profile.email}`}
         className="inline-block text-base font-semibold text-accent hover:underline"
       >
-        bikal3.bs@gmail.com
+        {profile.email}
       </a>
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1">
         {LINKS.map(({ label, href }) => (
@@ -33,7 +34,7 @@ export default function Contact() {
           </a>
         ))}
         <a
-          href="/BikalShrestha-CV.pdf"
+          href={profile.cv}
           download
           className="inline-flex items-center py-1.5 text-sm text-text-muted hover:text-accent transition-colors"
         >

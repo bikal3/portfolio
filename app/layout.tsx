@@ -7,6 +7,7 @@ import BackToTop from '@/components/BackToTop'
 import ThemeToggle from '@/components/ThemeToggle'
 import Footer from '@/components/Footer'
 import profileImg from '@/data/profile.webp'
+import { profile } from '@/data/profile'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -52,12 +53,9 @@ const personJsonLd = {
   url: SITE_URL,
   image: `${SITE_URL}${profileImg.src}`,
   jobTitle: 'Spatial Data Analyst & Data Scientist',
-  email: 'mailto:bikal3.bs@gmail.com',
+  email: `mailto:${profile.email}`,
   description: DESCRIPTION,
-  sameAs: [
-    'https://github.com/bikal3',
-    'https://linkedin.com/in/shresthabikal/',
-  ],
+  sameAs: [profile.github, profile.linkedin],
   alumniOf: [
     { '@type': 'CollegeOrUniversity', name: 'Clark University' },
     { '@type': 'CollegeOrUniversity', name: 'Coventry University' },

@@ -32,7 +32,7 @@ export default function About() {
   return (
     <section id="about" aria-labelledby="about-heading" className="py-12 border-b border-border-subtle">
       <SectionLabel id="about-heading">About</SectionLabel>
-      <div className="space-y-4 text-sm text-text-body leading-relaxed mb-10">
+      <div className="space-y-4 max-w-[68ch] text-sm text-text-body leading-relaxed mb-10">
         <p>
           I&rsquo;m Bikal Shrestha, a spatial data analyst and data scientist with
           dual master&rsquo;s degrees in Geographic Information Science and Data
@@ -63,7 +63,7 @@ export default function About() {
         </p>
       </div>
 
-      <h3 className="text-[11px] text-text-faint font-semibold tracking-[2px] uppercase mb-5">
+      <h3 className="text-xs text-text-faint font-semibold tracking-[2px] uppercase mb-5">
         Skills
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -74,7 +74,7 @@ export default function About() {
               {items.map((item) => (
                 <span
                   key={item}
-                  className="text-[11px] text-text-muted bg-surface border border-border-strong px-2 py-0.5 rounded"
+                  className="text-xs text-text-muted bg-surface border border-border-strong px-2 py-0.5 rounded"
                 >
                   {item}
                 </span>

@@ -4,6 +4,8 @@ Personal portfolio site built with Next.js, Tailwind CSS v4, and TypeScript.
 
 **Live:** [bikal3.com.np](https://bikal3.com.np)
 
+[![HitCount](https://hits.dwyl.com/bikal3/bikal3.com.np.svg?style=flat-square)](https://hits.dwyl.com/bikal3/bikal3.com.np)
+
 ## Stack
 
 - **Framework:** Next.js 16 (App Router, static export)

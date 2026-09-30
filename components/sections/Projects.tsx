@@ -34,17 +34,17 @@ export default function Projects() {
               key={project.title}
               className="bg-surface border border-border-strong rounded-md p-4 shrink-0 transition-all hover:border-accent hover:bg-accent-bg"
             >
-              <h3 className="text-text-strong text-sm font-semibold mb-2">
+              <h3 className="text-text-strong text-base font-semibold mb-2">
                 {project.title}
               </h3>
-              <p className="text-text-muted text-xs leading-relaxed mb-3">
+              <p className="text-text-muted text-sm leading-relaxed mb-3 max-w-[68ch]">
                 {project.description}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="bg-accent-bg text-accent text-[10px] px-2 py-0.5 rounded"
+                    className="bg-accent-bg text-accent text-[11px] px-2 py-0.5 rounded"
                   >
                     {tech}
                   </span>

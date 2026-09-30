@@ -28,7 +28,7 @@ function ProjectCard({ project }: { project: Project }) {
   const primary = project.demo ?? project.github
 
   return (
-    <div className="group relative bg-surface border border-border-strong rounded-md p-4 transition-all hover:border-accent hover:bg-accent-bg focus-within:border-accent">
+    <div className="group relative bg-surface border border-border-strong rounded-md p-4 transition-colors hover:border-accent hover:bg-accent-bg focus-within:border-accent">
       <h4 className="text-text-strong text-base font-semibold mb-2">
         {primary ? (
           <a

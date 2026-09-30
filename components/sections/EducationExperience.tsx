@@ -13,7 +13,7 @@ export default function EducationExperience() {
               <h3 className="text-text-strong text-base font-semibold">{item.role}</h3>
               <p className="text-text-muted text-xs mt-0.5">{item.organization}</p>
               <p className="text-text-faint text-xs mt-0.5 mb-2">{item.dates}</p>
-              <ul className="flex flex-col gap-1 max-w-[68ch]">
+              <ul className="flex flex-col gap-1">
                 {item.bullets.map((b) => (
                   <li key={b} className="flex gap-2 text-sm text-text-muted leading-relaxed">
                     <span className="text-accent mt-0.5 shrink-0">›</span>

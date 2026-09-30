@@ -44,7 +44,7 @@ function ProjectCard({ project }: { project: Project }) {
         )}
       </h4>
       <p className="text-text-faint text-xs mb-2">{project.date}</p>
-      <p className="text-text-muted text-sm leading-relaxed mb-3 max-w-[68ch]">
+      <p className="text-text-muted text-sm leading-relaxed mb-3">
         {project.description}
       </p>
       <div className="flex flex-wrap gap-2 mb-4">

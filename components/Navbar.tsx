@@ -8,9 +8,11 @@ import { usePathname } from 'next/navigation'
 import profileImg from '@/data/profile.webp'
 import ThemeToggle from '@/components/ThemeToggle'
 
+// Order mirrors the DOM order of the sections, which is what scroll-spy
+// reports back; the work leads, the biography follows.
 const NAV_ITEMS = [
-  { id: 'about', label: 'About' },
   { id: 'projects', label: 'Projects' },
+  { id: 'about', label: 'About' },
   { id: 'experience', label: 'Experience' },
   { id: 'education', label: 'Education' },
 ] as const

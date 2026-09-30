@@ -20,6 +20,8 @@
   /* Lowest pairing is accent-on-accent-bg: 6.20:1 light, 7.82:1 dark. */
   --color-accent: light-dark(#1b5e7e, #7cb8d4);
   --color-accent-bg: light-dark(#e6f1f6, #0d1e2a);
+  /* Never sits under text -- see the page wrapper's opaque background. */
+  --color-graticule: light-dark(#e9e6dd, #182029);
   --font-serif: var(--font-newsreader), Georgia, serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
@@ -36,6 +38,19 @@ body {
   font-family: var(--font-serif);
   font-size: 1rem;
   line-height: 1.6;
+}
+
+/*
+ * Map graticule. Painted on body as a background-image rather than an added
+ * element, so it costs no DOM and needs no aria-hidden. The page wrapper is
+ * opaque and covers it, so the grid only shows in the margins beside the
+ * content -- never behind text, where it would cost contrast.
+ */
+body {
+  background-image:
+    linear-gradient(var(--color-graticule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-graticule) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
 /*

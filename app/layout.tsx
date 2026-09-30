@@ -119,7 +119,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="max-w-[51rem] mx-auto flex min-h-screen">
+        <div className="max-w-[51rem] mx-auto flex min-h-screen bg-bg">
           <Navbar />
           <main
             id="main-content"

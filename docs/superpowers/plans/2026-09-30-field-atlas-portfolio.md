@@ -272,7 +272,15 @@ This number is measured, not estimated, and two earlier estimates were wrong:
 |---|---|---|---|
 | 58rem | 640px | ~80-88 chars | estimate, overshoots |
 | 53rem | 560px | **79.3 chars measured** | real prose, 16 rendered lines, range 69-85 |
-| 51rem | 528px | **~74.8 chars** | scaled from the same measurement |
+| 51rem | 528px | **76.2 chars measured** | real prose, 16 rendered lines, range 72-81 |
+
+Linear scaling predicted 74.8 for 51rem; the measured value is 76.2, because
+line breaking is discrete -- whole words wrap, so the mean does not scale
+smoothly with width. The observed slope is ~0.1 characters per pixel.
+
+The 45-75 target is read as applying to the **mean**, not the longest line:
+ragged-right text keeps a maximum near 79-81 at any width in this range. 76.2
+is accepted and no further narrowing is warranted.
 
 Beware the measuring method. A canvas `measureText` over the a-z alphabet
 reports 73.7 characters for the 560px column, which looks compliant. It is

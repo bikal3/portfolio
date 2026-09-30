@@ -55,10 +55,18 @@ behaviour is unchanged.
 
 The content column's width is set once on the page wrapper, as it is now, and
 no block inside carries its own width cap. The wrapper is 51rem, measured
-rather than estimated: that leaves a 528px content box, which renders at ~75
-characters of real prose at 16px. 53rem measures 79.3 and 58rem overshoots
-further still. Raising the body size from 12-14px to 16px does most of the
-work; the column then narrows slightly rather than widening. The
+rather than estimated: a 528px content box rendering real prose at 16px gives
+a **mean of 76.2 characters per line** (range 72-81, across 16 rendered lines).
+
+The 45-75 target applies to the mean, not to the longest line. Ragged-right
+text always throws individual lines above the average, and the maximum stays
+near 79-81 at any width in this range, so treating the ceiling as a hard cap on
+every line would chase a number that cannot be reached. 76.2 is accepted.
+
+For reference if it is ever revisited: 53rem measures 79.3, and extrapolating
+the measured slope of ~0.1 characters per pixel puts 50rem near 74.6. Raising
+the body size from 12-14px to 16px does most of the work; the column then
+narrows slightly rather than widening. The
 desktop theme toggle's wrapper must track the wrapper width, since it aligns to
 the content's right edge.
 

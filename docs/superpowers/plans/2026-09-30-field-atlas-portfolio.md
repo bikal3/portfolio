@@ -1448,5 +1448,32 @@ Merging to `main` deploys. Hold until the browser review above is done and Bikal
 
 ## Open items carried from the spec
 
+0. **Nepal GLOF Explorer describes simulated data as measured.** Bikal's
+   decision, 2026-09-30: leave the card's wording alone; he intends to wire the
+   real Sentinel-2 / Landsat data into the project itself. Recorded here so it
+   is not silently forgotten, and so nobody "helpfully" rewords it in a later
+   task.
+
+   The mismatch, for the record. The project's own README says "Lake areas,
+   growth rates, dam types, downstream slopes and settlement distances are
+   simulated by `data/generate_data.py`", and its live Methodology page says
+   "The numbers in this app are simulated", "this site carries no validation
+   against observed GLOF events", and "Do not use anything here for planning,
+   early warning or risk communication". The site lists Landsat and Sentinel-2
+   as "No -- pipeline only". The card says the project tracks 25 lakes from
+   2000 to 2024 and combines ML risk classification with satellite change
+   detection "to support early warning and disaster preparedness", and lists
+   Sentinel-2 and Landsat under technologies.
+
+   This is **not a regression introduced by this branch** -- the same wording is
+   live on `main` today -- so it does not block the merge. It is a content
+   issue for Bikal to close by changing the project, the card, or both.
+
+   Consequence for Task 4: `sensors`, `period` and `validation` are omitted
+   from this study, because none of them are verifiable from a source that
+   describes shipped data. That omission stands regardless of how the wording
+   question is settled.
+
+
 1. **Publication and thesis entries.** Sections are built and hidden. Bikal supplies the content; no task invents it.
 2. **Per-study record values.** Task 4 fills only what each README or live site states. Anything unverifiable is left out and needs Bikal's confirmation before merge.

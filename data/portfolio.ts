@@ -26,7 +26,7 @@ const PROJECTS: Study[] = [
     date: 'Aug 2026',
     region: 'Bhote Koshi–Trishuli, Rasuwa',
     sensors: ['Sentinel-1 GRD', 'Sentinel-2 L2A', 'SRTM GL1 (30 m)'],
-    period: '1 Aug–1 Sep 2026',
+    period: 'Aug 2026',
     validation: 'HOT ground survey',
     description:
       'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
@@ -52,7 +52,6 @@ const PROJECTS: Study[] = [
     region: 'Big Island of Hawaiʻi',
     sensors: ['NASA IMERG Early Run V07B', 'GOES-17 BCM', 'SRTM DEM (30 m)', 'HCDP rain gauges (~165)'],
     period: '2020–Jun 2021',
-    validation: 'Test loss 0.0332 (Apr–Jun 2021 test split)',
     description:
       'Enhances NASA IMERG precipitation estimates from 10 km to 250 m resolution over Hawaii using a dual-branch CNN that fuses satellite imagery with topographic data. Enables finer-grained rainfall mapping for hydrological and climate applications.',
     technologies: ['PyTorch', 'Python', 'NASA IMERG', 'Google Earth Engine', 'Jupyter', 'DEM'],

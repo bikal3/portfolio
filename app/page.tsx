@@ -15,8 +15,8 @@ export default function HomePage() {
       <h1 className="sr-only">
         Bikal Shrestha, Spatial Data Analyst and Data Scientist
       </h1>
-      <Projects />
       <About />
+      <Projects />
       <EducationExperience />
       <Contact />
     </>

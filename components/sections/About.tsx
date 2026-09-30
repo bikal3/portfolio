@@ -32,7 +32,7 @@ export default function About() {
   return (
     <section id="about" aria-labelledby="about-heading" className="py-12 border-b border-border-subtle">
       <SectionLabel id="about-heading">About</SectionLabel>
-      <div className="space-y-4 max-w-[68ch] text-sm text-text-body leading-relaxed mb-10">
+      <div className="space-y-4 max-w-[68ch] text-sm text-text-body leading-relaxed mb-10 text-justify hyphens-auto">
         <p>
           I&rsquo;m Bikal Shrestha, a spatial data analyst and data scientist with
           dual master&rsquo;s degrees in Geographic Information Science and Data

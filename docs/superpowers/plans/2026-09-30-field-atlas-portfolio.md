@@ -332,28 +332,55 @@ git commit -m "style: swap Inter for Newsreader and IBM Plex Mono"
 
 ### Task 3: Graticule
 
+The graticule surrounds the content rather than sitting under it. The page
+reads as a map sheet laid on a gridded table: content on clean paper, grid in
+the margin.
+
+This is not a stylistic preference, it is forced. Measured worst case with text
+directly over a 1px graticule line at the originally specified colours:
+
+| Pairing | Over a line | Needs |
+|---|---|---|
+| light body `#3a3a3a` on `#e9e6dd` | 9.11 | 4.5 — pass |
+| dark body `#cccccc` on `#182029` | 10.24 | 4.5 — pass |
+| light faint `#6e6e6e` on `#e9e6dd` | **4.09** | 4.5 — **fail** |
+| dark faint `#7f7f7f` on `#182029` | **4.11** | 4.5 — **fail** |
+
+`--color-text-faint` carries dates, the footer, section counts and the sidebar
+role line, and most of it sits bare on the page background. Lightening the
+graticule until faint text passes lands at 4.52/4.51 — a 0.02 margin — and
+takes the dark lines to 1.06:1 against the background, which is invisible.
+Darkening the faint token collapses the faint/muted tier in dark.
+
+Keeping the grid out from under text solves it outright, keeps the lines
+visible, and is what the spec asked for: *"it never sits behind body text where
+it would cost contrast."*
+
 **Files:**
 - Modify: `app/globals.css`
+- Modify: `app/layout.tsx`
 
-- [ ] **Step 1: Add the graticule tokens and rule**
+- [ ] **Step 1: Add the token**
 
-Add inside `@theme`:
+Inside `@theme`:
 
 ```css
+  /* Never sits under text -- see the page wrapper's opaque background. */
   --color-graticule: light-dark(#e9e6dd, #182029);
 ```
 
-Add as a SEPARATE `body` block after the merged one from Task 2. Keep it
-separate so its explanation travels with it, and use `background-image` rather
-than the `background` shorthand -- the shorthand would reset the
-`background-color` that Task 2's block sets:
+- [ ] **Step 2: Paint it on `body`**
+
+A separate `body` block, after the merged one from Task 2. Keep it separate so
+its explanation travels with it, and use `background-image` rather than the
+`background` shorthand, which would reset Task 2's `background-color`:
 
 ```css
 /*
  * Map graticule. Painted on body as a background-image rather than an added
- * element, so it costs no DOM and needs no aria-hidden. Sits behind cards and
- * panels, which carry their own surface colour, so it never reduces the
- * contrast of body text.
+ * element, so it costs no DOM and needs no aria-hidden. The page wrapper is
+ * opaque and covers it, so the grid only shows in the margins beside the
+ * content -- never behind text, where it would cost contrast.
  */
 body {
   background-image:
@@ -363,19 +390,37 @@ body {
 }
 ```
 
-- [ ] **Step 2: Verify contrast is untouched**
+- [ ] **Step 3: Make the content wrapper opaque**
 
-```bash
-rm -rf .next out && npm run build >/dev/null && npm run verify
+In `app/layout.tsx`, add `bg-bg` to the page wrapper, so the content sits on
+solid paper and the graticule shows only around it:
+
+```tsx
+className="max-w-[51rem] mx-auto flex min-h-screen bg-bg"
 ```
 
-Expected: `verify: all checks passed`. The graticule sits on `body`; text sits on `--color-bg` surfaces above it.
+Everything the reader looks at is inside this wrapper, so nothing ends up over
+a grid line. Below 816px the wrapper fills the viewport and the graticule is
+simply not visible; it is decoration, and small screens have no room for it.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Verify**
 
 ```bash
-git add app/globals.css
-git commit -m "style: add the map graticule background"
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
+```
+
+Confirm from the built CSS that the `body` rule still carries
+`background-color` — a `background` shorthand anywhere would silently drop it.
+
+Then confirm in a headless browser at 1440px wide, in both themes, that the
+grid is visible in the margins and that no text overlaps a line. Sample a pixel
+inside the content column and one in the margin; they must differ.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add app/globals.css app/layout.tsx
+git commit -m "style: add the map graticule around the content"
 ```
 
 ---

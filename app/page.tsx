@@ -2,6 +2,7 @@
 import About from '@/components/sections/About'
 import Projects from '@/components/sections/Projects'
 import EducationExperience from '@/components/sections/EducationExperience'
+import Contact from '@/components/sections/Contact'
 
 export default function HomePage() {
   return (
@@ -17,6 +18,7 @@ export default function HomePage() {
       <Projects />
       <About />
       <EducationExperience />
+      <Contact />
     </>
   )
 }

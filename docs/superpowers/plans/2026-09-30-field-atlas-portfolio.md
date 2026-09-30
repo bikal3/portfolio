@@ -399,9 +399,31 @@ solid paper and the graticule shows only around it:
 className="max-w-[51rem] mx-auto flex min-h-screen bg-bg"
 ```
 
-Everything the reader looks at is inside this wrapper, so nothing ends up over
-a grid line. Below 816px the wrapper fills the viewport and the graticule is
-simply not visible; it is decoration, and small screens have no room for it.
+The mask works in two parts, and both are load-bearing:
+
+1. In-flow content is inside the wrapper, so the opaque background covers the
+   grid behind it.
+2. Every `fixed` overlay that escapes the wrapper carries its own opaque
+   surface. At grid-visible widths the focused skip link is the only escapee --
+   it sits at `top-3 left-3`, in the left margin over the grid -- and it is
+   safe because of `focus:bg-surface`, measured at 6.65:1 light / 8.33:1 dark.
+   The mobile header, drawer and BackToTop are all `md:hidden`, so they exist
+   only below 768px where no margin exists, and are opaque anyway.
+
+**Ceiling: the mask covers in-flow boxes, not painted overflow.** A child whose
+border box is clamped can still paint text past it -- `min-w-0` does not
+prevent this -- and that text would land on the graticule, re-opening the
+4.09/4.11 contrast failure invisibly. No current content overflows. The tasks
+most likely to breach it are the record tables from Task 6 onward, where a long
+unbroken token in a mono cell is the classic cause. Do not pre-empt it; if it
+bites, `overflow-wrap: anywhere` on the record cells is the fix. Note that a
+`getBoundingClientRect` comparison returns a false negative here -- the useful
+assertion is `document.documentElement.scrollWidth === window.innerWidth`.
+
+Below 816px the wrapper fills the viewport and the graticule is simply not
+visible; it is decoration, and small screens have no room for it. (816px
+assumes a 16px root: both widths are in `rem`, so a reader at a 20px root, or
+at 200% zoom, loses the grid at proportionally larger viewports.)
 
 - [ ] **Step 4: Verify**
 
@@ -421,6 +443,85 @@ inside the content column and one in the margin; they must differ.
 ```bash
 git add app/globals.css app/layout.tsx
 git commit -m "style: add the map graticule around the content"
+```
+
+---
+
+### Task 3b: Cover the graticule invariants, and centre the lattice
+
+Task 3's design rests on two invariants that nothing detects. Deleting `bg-bg`
+from the wrapper puts the grid back under all text and silently restores a
+**WCAG AA failure**; collapsing the merged `body` rules into a `background:`
+shorthand silently kills the page background colour. Both are the
+"reports success while the property is broken" class that Task 1 exists to
+catch.
+
+**Files:**
+- Modify: `scripts/verify.mjs`
+- Modify: `app/globals.css`
+
+- [ ] **Step 1: Add the two checks**
+
+In `scripts/verify.mjs`, after the existing `measure caps` check:
+
+```js
+// Task 3 keeps the graticule out from under text by making the page wrapper
+// opaque. Lose either half and the grid returns behind every line of body
+// text, where faint text measures 4.09:1 light and 4.11:1 dark -- under AA.
+check(
+  'body keeps its background colour',
+  rules.filter((r) => r.selectors.includes('body')).some((r) => /background-color\s*:/.test(r.body))
+)
+check(
+  'page wrapper is opaque',
+  /class="[^"]*\bbg-bg\b[^"]*max-w-\[51rem\]|class="[^"]*max-w-\[51rem\][^"]*\bbg-bg\b/.test(dom)
+)
+```
+
+The wrapper check accepts either class order, since Tailwind is free to reorder.
+
+- [ ] **Step 2: Prove both can fail**
+
+Mutate the built output in `out/` only, never the source, and rebuild to restore:
+
+| Mutation | Expected failure |
+|---|---|
+| In the built CSS, change `body{background-color:...` to drop that declaration | `body keeps its background colour` |
+| In `out/index.html`, remove `bg-bg` from the wrapper's class attribute | `page wrapper is opaque` |
+
+- [ ] **Step 3: Centre the lattice**
+
+The grid's origin is the `body` box, so its phase drifts with viewport width
+and the gap either side of the content column goes lopsided -- 19/29 at 1366px,
+and at 1680px and 3440px a line lands flush against the column edge, reading as
+an accidental hairline border. One declaration fixes it at every width, because
+`408 mod 32 = 24` symmetrically. Add to the graticule `body` block:
+
+```css
+  background-position-x: 50%;
+```
+
+Confirmed at 1280/1366/1440/1600/1920/2560: gaps become a constant 24px on both
+sides, with zero graticule pixels inside the column. Only the vertical-line
+layer moves; the horizontal gradient is uniform in X, so shifting it does
+nothing. Accepted trade: between 816px and 864px the margins are thinner than
+24px and the grid does not appear there, where today a hairline can.
+
+Perfect alignment to both edges is impossible at this width (816 = 32 x 25.5)
+and would need a 52rem column, contradicting Task 2's measured decision. Do not
+chase it.
+
+- [ ] **Step 4: Verify**
+
+```bash
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add scripts/verify.mjs app/globals.css
+git commit -m "test: cover the graticule invariants, and centre the lattice"
 ```
 
 ---

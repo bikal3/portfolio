@@ -54,10 +54,11 @@ and section nav, and a single content column beside it. The mobile drawer
 behaviour is unchanged.
 
 The content column's width is set once on the page wrapper, as it is now, and
-no block inside carries its own width cap. The wrapper stays at 53rem: that
-leaves a 560px content box, which is ~70-75 characters at 16px. Raising the
-body size from 12-14px to 16px is what fixes the measure; widening the column
-as well would push it to ~80-88 and overshoot in the other direction. The
+no block inside carries its own width cap. The wrapper is 51rem, measured
+rather than estimated: that leaves a 528px content box, which renders at ~75
+characters of real prose at 16px. 53rem measures 79.3 and 58rem overshoots
+further still. Raising the body size from 12-14px to 16px does most of the
+work; the column then narrows slightly rather than widening. The
 desktop theme toggle's wrapper must track the wrapper width, since it aligns to
 the content's right edge.
 

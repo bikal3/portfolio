@@ -261,18 +261,31 @@ body {
 }
 ```
 
-- [ ] **Step 3: Leave the column width alone**
+- [ ] **Step 3: Set the column width from a real measurement**
 
-**Do not change `max-w-[53rem]`.** An earlier revision of this plan widened it to 58rem on the premise that 16px prose needs a wider column. That was wrong, and the arithmetic is worth recording so it is not re-litigated:
+Use `max-w-[51rem]`. Both values must change together -- the page wrapper and
+the desktop theme-toggle wrapper, which aligns to the content's right edge.
 
-- 53rem = 848px − 208px sidebar = 640px main − 80px (`md:px-10`) = **560px** content
-- 58rem = 928px − 208px = 720px main − 80px = **640px** content
-- A text serif's average lowercase advance is ~0.46–0.50em, so at 16px one character is ~7.4–8.0px
-- 560px → **~70–75 characters**. 640px → **~80–88 characters**
+This number is measured, not estimated, and two earlier estimates were wrong:
 
-The target is 45–75. Raising the body size from 12–14px to 16px fixes the measure on its own; widening the column then breaks it in the other direction. There is no safety net: `scripts/verify.mjs` forbids per-block `max-w-[Nch]` caps, so this one wrapper value *is* the measure.
+| Wrapper | Content box | Measure | Source |
+|---|---|---|---|
+| 58rem | 640px | ~80-88 chars | estimate, overshoots |
+| 53rem | 560px | **79.3 chars measured** | real prose, 16 rendered lines, range 69-85 |
+| 51rem | 528px | **~74.8 chars** | scaled from the same measurement |
 
-If a previous run of this task already changed the values, revert both to `max-w-[53rem]` — the page wrapper and the desktop theme-toggle wrapper, which must stay equal because the toggle aligns to the content's right edge.
+Beware the measuring method. A canvas `measureText` over the a-z alphabet
+reports 73.7 characters for the 560px column, which looks compliant. It is
+wrong by about 8%: the alphabet weights `m` and `w` equally with `i` and `l`,
+so it overstates average character width against English prose. Counting
+characters on actually rendered lines of the real bio paragraphs gives 79.3.
+**Trust rendered lines, not the alphabet metric.**
+
+The target is 45-75 characters. 51rem lands at the top of that range, keeping
+as much width as possible for the study records and figures.
+
+There is no safety net: `scripts/verify.mjs` forbids per-block `max-w-[Nch]`
+caps, so this one wrapper value is the measure for the whole page.
 
 - [ ] **Step 4: Verify**
 
@@ -283,7 +296,7 @@ grep -c '53rem' out/_next/static/chunks/*.css
 grep -o 'font-mono{[^}]*}' out/_next/static/chunks/*.css
 ```
 
-Expected: `verify: all checks passed`; the first grep prints `2`; the second prints `1` (the wrapper's own rule, no longer a duplicate leaked from `docs/`); the third shows `font-mono` resolving through `var(--font-mono)`.
+Expected: `verify: all checks passed`; the first grep prints `2`; the second prints `1`; the third shows `font-mono` resolving through `var(--font-mono)`, or nothing at all while no component uses the utility yet.
 
 Measure the real line length in a headless browser against the built page, and record the number here rather than trusting the estimate:
 

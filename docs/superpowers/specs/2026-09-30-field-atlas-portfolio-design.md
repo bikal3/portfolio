@@ -58,10 +58,14 @@ no block inside carries its own width cap. The wrapper is 51rem, measured
 rather than estimated: a 528px content box rendering real prose at 16px gives
 a **mean of 76.2 characters per line** (range 72-81, across 16 rendered lines).
 
-The 45-75 target applies to the mean, not to the longest line. Ragged-right
-text always throws individual lines above the average, and the maximum stays
-near 79-81 at any width in this range, so treating the ceiling as a hard cap on
-every line would chase a number that cannot be reached. 76.2 is accepted.
+The 45-75 target applies to the mean, not to the longest line: ragged-right
+text always throws individual lines above the average. 76.2 is accepted because
+it overshoots a soft convention by 1.2 characters, well inside the 72-81 spread
+of the measurement itself, and the width earns its keep on the study records.
+
+Note the maximum is **not** width-independent -- it measured 85 at 53rem and 81
+at 51rem, tracking the column down. Do not cite a fixed ceiling as a reason to
+widen anything back.
 
 For reference if it is ever revisited: 53rem measures 79.3, and extrapolating
 the measured slope of ~0.1 characters per pixel puts 50rem near 74.6. Raising

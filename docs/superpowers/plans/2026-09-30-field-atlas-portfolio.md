@@ -278,9 +278,12 @@ Linear scaling predicted 74.8 for 51rem; the measured value is 76.2, because
 line breaking is discrete -- whole words wrap, so the mean does not scale
 smoothly with width. The observed slope is ~0.1 characters per pixel.
 
-The 45-75 target is read as applying to the **mean**, not the longest line:
-ragged-right text keeps a maximum near 79-81 at any width in this range. 76.2
-is accepted and no further narrowing is warranted.
+The 45-75 target is read as applying to the **mean**, not the longest line.
+76.2 is accepted: it is 1.2 over a soft convention, inside the 72-81 spread of
+the measurement, and 50rem would buy only ~1.6 characters.
+
+The maximum is not width-independent -- 85 at 53rem, 81 at 51rem -- so it is
+not a reason to widen anything back.
 
 Beware the measuring method. A canvas `measureText` over the a-z alphabet
 reports 73.7 characters for the 560px column, which looks compliant. It is
@@ -1104,6 +1107,34 @@ console.log('nav targets OK:', hrefs.join(', '));"
 ```
 
 Expected: `nav targets OK: research, studies, teaching, experience, education, contact`
+
+- [ ] **Step 4: Bound the measure below the `md` breakpoint**
+
+Under 768px the sidebar is hidden and `main` takes the whole viewport at
+`px-5`, so nothing caps the measure until the 816px wrapper binds. Measured at
+6.93px per character: a 767px viewport renders ~105 characters, worse than
+desktop. (Pre-existing, and Task 2 improved it from ~127, but the measure goal
+currently holds only at `md` and above.)
+
+Fix it on the wrapper, keeping the spec's "set once, no per-block caps" rule --
+a responsive value on the same element is still one lever:
+
+```tsx
+className="max-w-[34rem] md:max-w-[51rem] mx-auto flex min-h-screen"
+```
+
+34rem is 544px, leaving 504px of content at `px-5`, about 73 characters. Below
+544px the viewport binds first and the cap is inert, so phones are unaffected.
+
+The theme-toggle wrapper aligns to the content's right edge but is `hidden`
+below `md`, so it needs only the `md:` value: `md:max-w-[51rem]`.
+
+Note `scripts/verify.mjs` forbids only the `max-w-[Nch]` form, so a `rem` cap
+would pass the script regardless -- this constraint is carried by the spec, not
+by the script.
+
+Verify at three widths with a headless browser, counting rendered lines rather
+than the alphabet metric: 767px, 768px and 1280px. Expect every mean under 80.
 
 - [ ] **Step 4: Commit**
 

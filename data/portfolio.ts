@@ -3,21 +3,31 @@
 // Only `projects` needs a declared type: without it, TypeScript infers a union
 // where the entries missing `github` make `project.github` unreachable. The
 // other two arrays have no optional fields, so inference is enough.
-interface Project {
+interface Study {
   title: string
-  /** When the work was done, as 'MMM YYYY'. Required: a card with no date
-      gives the reader no sense of recency. */
+  /** When the work was done, as 'MMM YYYY'. Drives the newest-first sort. */
   date: string
   description: string
+  /** Map-sheet record. Any field left undefined is omitted from the table
+      rather than rendered blank: an academic reader reads a blank field as a
+      gap in the work, so only state what is verifiable. */
+  region?: string
+  sensors?: string[]
+  period?: string
+  validation?: string
   technologies: string[]
   github?: string
   demo?: string
 }
 
-const PROJECTS: Project[] = [
+const PROJECTS: Study[] = [
   {
     title: 'Rasuwa Transboundary Flood',
     date: 'Aug 2026',
+    region: 'Bhote Koshi–Trishuli, Rasuwa',
+    sensors: ['Sentinel-1 GRD', 'Sentinel-2 L2A', 'SRTM GL1 (30 m)'],
+    period: '1 Aug–1 Sep 2026',
+    validation: 'HOT ground survey',
     description:
       'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
     technologies: ['Google Earth Engine', 'Sentinel-1/2', 'Python', 'React', 'SRTM', 'Cloudflare Pages'],
@@ -27,6 +37,10 @@ const PROJECTS: Project[] = [
   {
     title: 'BhumiScan: Earth-Embedding Search for Nepal',
     date: 'Jul 2026',
+    region: 'Nepal',
+    sensors: ['Sentinel-1', 'Sentinel-2'],
+    period: '2020–2025',
+    validation: '73.7% macro precision@10 (ESA WorldCover labels)',
     description:
       'Country-scale visual search over Nepal’s landscape. Click any location (a glacial lake, a terraced hillside) and retrieve the most similar places nationwide from 22,676 Clay v1.5 Sentinel-2 embedding cells. Detects 2020→2025 land change scored by cloud-penetrating Sentinel-1 radar, so monsoon haze cannot fake a hotspot, with a cloud-free before/after imagery swipe. Scores 73.7% macro precision@10 against ESA WorldCover labels, a 5.9× lift over the random baseline, and runs entirely client-side with no backend or vector database.',
     technologies: ['Next.js', 'TypeScript', 'MapLibre GL', 'Clay v1.5', 'Sentinel-1/2', 'DuckDB', 'Python', 'Cloudflare R2'],
@@ -35,6 +49,10 @@ const PROJECTS: Project[] = [
   {
     title: 'Dual-Branch U-Net for Precipitation Downscaling',
     date: 'Jan 2026',
+    region: 'Big Island of Hawaiʻi',
+    sensors: ['NASA IMERG Early Run V07B', 'GOES-17 BCM', 'SRTM DEM (30 m)', 'HCDP rain gauges (~165)'],
+    period: '2020–Jun 2021',
+    validation: 'Test loss 0.0332 (Apr–Jun 2021 test split)',
     description:
       'Enhances NASA IMERG precipitation estimates from 10 km to 250 m resolution over Hawaii using a dual-branch CNN that fuses satellite imagery with topographic data. Enables finer-grained rainfall mapping for hydrological and climate applications.',
     technologies: ['PyTorch', 'Python', 'NASA IMERG', 'Google Earth Engine', 'Jupyter', 'DEM'],
@@ -44,6 +62,9 @@ const PROJECTS: Project[] = [
   {
     title: 'California Wildfire Analysis Dashboard',
     date: 'Nov 2024',
+    region: 'California',
+    sensors: ['MTBS (USGS)', 'ERA5 (via Open-Meteo)'],
+    period: '1984–2022',
     description:
       'Interactive dashboard covering 38 years (1984–2022) of California wildfire history derived from MTBS satellite imagery and climate records. Enables exploration of burn extent, severity trends, and climate correlations across the state.',
     technologies: ['Plotly', 'Leaflet', 'Pandas', 'Python', 'MTBS/USGS', 'Docker'],
@@ -53,6 +74,9 @@ const PROJECTS: Project[] = [
   {
     title: 'Peru Wildfire Dashboard',
     date: 'Mar 2025',
+    region: 'Peru',
+    sensors: ['NASA FIRMS (MODIS + VIIRS)', 'MODIS MCD64A1', 'Sentinel-2 10 m LULC 2024'],
+    period: '2000–2024',
     description:
       'Interactive dashboard visualizing 24 years (2000–2024) of wildfire activity across Peru using 32,000+ NASA FIRMS hotspots and MODIS burned area data. Features layer toggles for protected areas and indigenous territories, temporal trend analysis, regional fire rankings, and land governance breakdowns.',
     technologies: ['Next.js', 'MapLibre GL', 'Recharts', 'Python', 'GeoPandas', 'scikit-learn', 'NASA FIRMS', 'MODIS'],
@@ -62,6 +86,7 @@ const PROJECTS: Project[] = [
   {
     title: 'Mapping Invasive Species: Hadwen Arboretum',
     date: 'Nov 2025',
+    region: 'Hadwen Arboretum, Worcester, MA',
     description:
       'Interactive web app presenting a GIS-based survey of invasive plants across 26 acres of the Hadwen Arboretum in Worcester, MA. Reveals that 42.6% of the arboretum contains at least one invasive species, with five-chapter narrative storytelling, species density maps, a threat index, and a management effort estimator.',
     technologies: ['Python', 'Flask', 'Chart.js', 'Jupyter', 'pandas', 'GIS', 'JavaScript'],
@@ -71,6 +96,8 @@ const PROJECTS: Project[] = [
   {
     title: 'MappingAfrica: Satellite Agricultural Field Segmentation',
     date: 'May 2025',
+    region: 'Zambia',
+    validation: '81.79% pixel accuracy, 43.31% mIoU on the test split (MappingAfrica v2.0.0)',
     description:
       'Implements semantic segmentation of farmland across Zambia using a UNet architecture trained on multi-spectral satellite imagery. Achieves 81.79% pixel accuracy and 43.31% mIoU on the MappingAfrica v2.0.0 dataset. Includes an interactive demo for running inference in the browser.',
     technologies: ['PyTorch', 'UNet', 'FastAPI', 'React', 'Vite', 'rasterio', 'NumPy'],
@@ -80,6 +107,7 @@ const PROJECTS: Project[] = [
   {
     title: 'Nepal GLOF Explorer',
     date: 'Dec 2023',
+    region: 'Nepal Himalaya',
     description:
       'Maps glacial lake outburst flood (GLOF) hazard across the Nepal Himalaya, tracking 25 glacial lakes from 2000 to 2024. Combines ML-based risk classification with satellite change detection to support early warning and disaster preparedness.',
     technologies: ['scikit-learn', 'Google Earth Engine', 'Leaflet', 'Sentinel-2', 'Landsat', 'Python'],
@@ -106,7 +134,7 @@ function monthKey(date: string): number {
 
 // Sorted here, not in the component, so adding a project means appending to
 // PROJECTS in any order and letting its date decide where it lands.
-export const projects: Project[] = [...PROJECTS].sort(
+export const projects: Study[] = [...PROJECTS].sort(
   (a, b) => monthKey(b.date) - monthKey(a.date)
 )
 

@@ -54,10 +54,12 @@ and section nav, and a single content column beside it. The mobile drawer
 behaviour is unchanged.
 
 The content column's width is set once on the page wrapper, as it is now, and
-no block inside carries its own width cap. The wrapper grows from the current
-53rem to suit 16px prose while holding the measure near 70 characters; the
-desktop theme toggle's wrapper tracks that width, since it aligns to the
-content's right edge.
+no block inside carries its own width cap. The wrapper stays at 53rem: that
+leaves a 560px content box, which is ~70-75 characters at 16px. Raising the
+body size from 12-14px to 16px is what fixes the measure; widening the column
+as well would push it to ~80-88 and overshoot in the other direction. The
+desktop theme toggle's wrapper must track the wrapper width, since it aligns to
+the content's right edge.
 
 Section 1 below is the masthead *inside* the content column. The name appearing
 both there and in the sidebar is intended: the sidebar is a nav landmark, and

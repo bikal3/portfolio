@@ -197,21 +197,23 @@ git commit -m "test: add build verification script"
 
 - [ ] **Step 1: Replace the font imports in `app/layout.tsx`**
 
-Replace the `Inter` import and its instantiation:
+The CSS variable names matter. Do **not** name them `--font-serif` / `--font-mono`: those are Tailwind v4's own theme keys, and a `@theme` entry cannot reference itself (`--font-serif: var(--font-serif), …` is cyclic and invalid). Give next/font its own names, and let the theme keys point at them in Step 2.
 
 ```tsx
 import { IBM_Plex_Mono, Newsreader } from 'next/font/google'
 
 const serif = Newsreader({
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-newsreader',
   display: 'swap',
 })
 
 const mono = IBM_Plex_Mono({
+  // Newsreader is a variable font and takes no `weight`; IBM Plex Mono has no
+  // variable build on Google Fonts, so its weights must be listed.
   subsets: ['latin'],
   weight: ['400', '500'],
-  variable: '--font-mono',
+  variable: '--font-plex-mono',
   display: 'swap',
 })
 ```
@@ -222,47 +224,78 @@ Then on the `<html>` element replace `className={inter.variable}` with:
 className={`${serif.variable} ${mono.variable}`}
 ```
 
-- [ ] **Step 2: Update the token block in `app/globals.css`**
+- [ ] **Step 2: Update `app/globals.css`**
 
-Replace the `--font-family-sans` line inside `@theme` and add the type tokens:
+First, stop Tailwind scanning the plan documents. Tailwind v4 auto-detects sources from the project root and honours `.gitignore`, so every class name written in a `docs/` code block becomes a real emitted rule — a superseded class would silently work in a component instead of failing visibly. Add directly under the import:
 
 ```css
-  --font-family-serif: var(--font-serif), Georgia, serif;
-  --font-family-mono: var(--font-mono), ui-monospace, monospace;
+@import "tailwindcss";
+@source not "../docs";
 ```
 
-Also shift the accent to a cartographic ink blue. It stays in the same family
-as the current accent so the site remains recognisably the same person's, and
-both values keep their existing contrast headroom:
+Inside `@theme`, replace the `--font-family-sans` line with the real theme keys, so `font-serif` and `font-mono` become genuine utilities carrying their fallback tails:
 
 ```css
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+```
+
+Shift the accent to a cartographic ink blue. It stays in the same hue family as the current accent, and every pairing gains roughly 1.3 points of contrast ratio:
+
+```css
+  /* Lowest pairing is accent-on-accent-bg: 6.20:1 light, 7.82:1 dark. */
   --color-accent: light-dark(#1b5e7e, #7cb8d4);
 ```
 
-Add below the existing `body` rule:
+Then **merge** the type declarations into the existing `body` rule rather than adding a second block — Task 3 adds its own `body` block for the graticule, and two colour/type blocks invite a later "tidy-up" that collapses `background-image` into the `background` shorthand and wipes `background-color`:
 
 ```css
 body {
-  font-family: var(--font-family-serif);
-  font-size: 16px;
+  background-color: var(--color-bg);
+  color: var(--color-text-body);
+  font-family: var(--font-serif);
+  /* rem, not px: a px value here overrides the reader's own browser font-size
+     setting, and desynchronises the rem-based Tailwind type scale from it. */
+  font-size: 1rem;
   line-height: 1.6;
 }
 ```
 
-- [ ] **Step 3: Widen the column for 16px prose**
+- [ ] **Step 3: Leave the column width alone**
 
-In `app/layout.tsx`, change **both** width values from `max-w-[53rem]` to `max-w-[58rem]`: the page wrapper and the desktop theme-toggle wrapper. They must stay equal — the toggle aligns to the content's right edge and will drift if only one changes.
+**Do not change `max-w-[53rem]`.** An earlier revision of this plan widened it to 58rem on the premise that 16px prose needs a wider column. That was wrong, and the arithmetic is worth recording so it is not re-litigated:
 
-At 58rem the wrapper is 928px: 208px sidebar plus 720px main, whose `md:px-10` leaves 640px of content — about 70 characters at 16px.
+- 53rem = 848px − 208px sidebar = 640px main − 80px (`md:px-10`) = **560px** content
+- 58rem = 928px − 208px = 720px main − 80px = **640px** content
+- A text serif's average lowercase advance is ~0.46–0.50em, so at 16px one character is ~7.4–8.0px
+- 560px → **~70–75 characters**. 640px → **~80–88 characters**
+
+The target is 45–75. Raising the body size from 12–14px to 16px fixes the measure on its own; widening the column then breaks it in the other direction. There is no safety net: `scripts/verify.mjs` forbids per-block `max-w-[Nch]` caps, so this one wrapper value *is* the measure.
+
+If a previous run of this task already changed the values, revert both to `max-w-[53rem]` — the page wrapper and the desktop theme-toggle wrapper, which must stay equal because the toggle aligns to the content's right edge.
 
 - [ ] **Step 4: Verify**
 
 ```bash
 npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
-grep -c "max-w-\[58rem\]" app/layout.tsx
+grep -c "max-w-\[53rem\]" app/layout.tsx
+grep -c '53rem' out/_next/static/chunks/*.css
+grep -o 'font-mono{[^}]*}' out/_next/static/chunks/*.css
 ```
 
-Expected: `verify: all checks passed`, and the grep prints `2`.
+Expected: `verify: all checks passed`; the first grep prints `2`; the second prints `1` (the wrapper's own rule, no longer a duplicate leaked from `docs/`); the third shows `font-mono` resolving through `var(--font-mono)`.
+
+Measure the real line length in a headless browser against the built page, and record the number here rather than trusting the estimate:
+
+```js
+const p = document.querySelector('main p'), cs = getComputedStyle(p)
+const c = document.createElement('canvas').getContext('2d')
+c.font = `${cs.fontSize} ${cs.fontFamily}`
+const t = 'abcdefghijklmnopqrstuvwxyz '
+console.log(p.clientWidth / (c.measureText(t).width / t.length))
+```
+
+Expected: a value in the 45–75 range. If it exceeds 75, the column is still too wide and the wrapper needs reducing further before Task 3.
 
 - [ ] **Step 5: Commit**
 
@@ -286,7 +319,10 @@ Add inside `@theme`:
   --color-graticule: light-dark(#e9e6dd, #182029);
 ```
 
-Add after the `body` rule. It is painted on `body`, so there is no extra DOM node and nothing for assistive technology to encounter:
+Add as a SEPARATE `body` block after the merged one from Task 2. Keep it
+separate so its explanation travels with it, and use `background-image` rather
+than the `background` shorthand -- the shorthand would reset the
+`background-color` that Task 2's block sets:
 
 ```css
 /*

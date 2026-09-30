@@ -29,13 +29,29 @@ export default function Projects() {
           tabIndex={0}
           className="scroll-area h-[60vh] min-h-[360px] max-h-[620px] overflow-y-auto overscroll-contain flex flex-col gap-4 pr-3 pb-6"
         >
-          {projects.map((project) => (
+          {projects.map((project) => {
+            // The card highlights on hover, so the whole card must be the
+            // target. A stretched pseudo-element on the title link covers it
+            // without nesting anchors; the footer links sit above it on z.
+            const primary = project.demo ?? project.github
+            return (
             <div
               key={project.title}
-              className="bg-surface border border-border-strong rounded-md p-4 shrink-0 transition-all hover:border-accent hover:bg-accent-bg"
+              className="group relative bg-surface border border-border-strong rounded-md p-4 shrink-0 transition-all hover:border-accent hover:bg-accent-bg focus-within:border-accent"
             >
               <h3 className="text-text-strong text-base font-semibold mb-2">
-                {project.title}
+                {primary ? (
+                  <a
+                    href={primary}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="after:absolute after:inset-0 after:rounded-md group-hover:text-accent transition-colors"
+                  >
+                    {project.title}
+                  </a>
+                ) : (
+                  project.title
+                )}
               </h3>
               <p className="text-text-muted text-sm leading-relaxed mb-3 max-w-[68ch]">
                 {project.description}
@@ -56,7 +72,7 @@ export default function Projects() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-[11px] text-text-muted hover:text-accent transition-colors"
+                    className="relative z-10 inline-flex items-center gap-1.5 py-1.5 -my-1.5 text-xs text-text-muted hover:text-accent transition-colors"
                   >
                     <GitHubIcon />
                     GitHub
@@ -67,7 +83,7 @@ export default function Projects() {
                     href={project.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-[11px] text-text-muted hover:text-accent transition-colors"
+                    className="relative z-10 inline-flex items-center gap-1.5 py-1.5 -my-1.5 text-xs text-text-muted hover:text-accent transition-colors"
                   >
                     <ExternalIcon />
                     Live Demo
@@ -75,7 +91,8 @@ export default function Projects() {
                 )}
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
         {/* Fade hint that the list keeps going */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-bg to-transparent" />

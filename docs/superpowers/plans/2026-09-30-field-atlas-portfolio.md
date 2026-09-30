@@ -17,7 +17,7 @@
 **Create**
 | Path | Responsibility |
 |---|---|
-| `scripts/verify.mjs` | Asserts the quality bar against `out/index.html`. Run after every build. |
+| `scripts/verify.mjs` | Asserts the quality bar against `out/index.html`. Run after every build via `npm run verify`. |
 | `data/publications.ts` | Papers and thesis. Ships empty; types documented. |
 | `components/ui/RecordTable.tsx` | Label/value rows in mono. Returns `null` when empty. |
 | `components/sections/Masthead.tsx` | Name, role, affiliation, coordinate ticks. Owns the page `h1`. |
@@ -47,18 +47,27 @@
 
 Everything after this task depends on a repeatable check. There is no test runner, so this script is the regression net.
 
+Two classes of bug make a check like this worse than useless, because it reports success while the property is broken:
+
+- **Substring matching on minified CSS.** `main:focus-visible{outline:none}` contains the literal `:focus-visible{outline`, so a naive substring check for the global focus ring is satisfied by the rule that disables it. The checks below parse rule blocks and read the `outline` declaration instead.
+- **Matching the RSC flight payload.** Next serialises the whole page into `<script>self.__next_f.push(...)</script>`, so `og:image:width` and `application/ld+json` appear as text even when the real tags are gone. Checks run against `dom` (scripts stripped), except the JSON-LD one, which must see a real `<script>` tag and so matches the tag shape rather than a bare string.
+
 **Files:**
 - Create: `scripts/verify.mjs`
+- Modify: `package.json` (add the `verify` script)
 
 - [ ] **Step 1: Write the script**
 
 ```js
 // scripts/verify.mjs
-// Asserts the quality bar against the built page. Run: node scripts/verify.mjs
+// Asserts the quality bar against the built page. Run: npm run verify
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const html = readFileSync('out/index.html', 'utf8')
+// Next serialises the page into an RSC flight payload inside <script>. Strip
+// it, or a check can be satisfied by the payload's copy of a tag that is no
+// longer in the document.
 const dom = html.replace(/<script[\s\S]*?<\/script>/g, '')
 const css = readdirSync('out/_next/static/chunks')
   .filter((f) => f.endsWith('.css'))
@@ -70,6 +79,15 @@ const check = (name, condition) => {
   if (!condition) failures.push(name)
 }
 
+// Parse rule blocks so CSS checks compare selectors and declarations rather
+// than substrings of minified text.
+const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, sel, body]) => ({
+  selectors: sel.split(',').map((s) => s.trim()),
+  body,
+}))
+const outlineOf = (body) => body.match(/(?:^|;)\s*outline\s*:\s*([^;]+)/)?.[1].trim()
+const suppressed = (value) => /^(none|0)\b/.test(value ?? '')
+
 // Headings: exactly one h1, and no level is skipped.
 const levels = [...dom.matchAll(/<h([1-6])/g)].map((m) => Number(m[1]))
 check('exactly one h1', levels.filter((l) => l === 1).length === 1)
@@ -79,21 +97,36 @@ check(
   levels.every((l, i) => i === 0 || l <= levels[i - 1] + 1)
 )
 
-// Anchors must never nest: the stretched-link pattern makes this easy to break.
-check('no nested anchors', !/<a [^>]*>(?:(?!<\/a>).)*<a /s.test(dom))
+// Anchors must never nest: the stretched-link pattern makes this easy to
+// break. The character class after `<a` also catches `<a>` and a newline.
+check('no nested anchors', !/<a[\s>][^>]*>(?:(?!<\/a>).)*<a[\s>]/s.test(dom))
 
 // Quality bar held since the 2026-09 audit.
 check('skip link present', dom.includes('Skip to content'))
-check('global focus ring', css.includes(':focus-visible{outline'))
-check('main opts out of ring', css.includes('main:focus'))
+check(
+  'global focus ring',
+  rules.some(
+    (r) => r.selectors.includes(':focus-visible') && !suppressed(outlineOf(r.body))
+  )
+)
+check(
+  'main opts out of ring',
+  rules.some(
+    (r) => r.selectors.includes('main:focus-visible') && suppressed(outlineOf(r.body))
+  )
+)
 check('reduced motion honoured', css.includes('prefers-reduced-motion'))
-check('no per-block measure caps', !dom.includes('max-w-[68ch]'))
-check('canonical present', html.includes('rel="canonical"'))
-check('JSON-LD present', html.includes('application/ld+json'))
-check('og image dimensions', html.includes('og:image:width'))
+check('no per-block measure caps', !/max-w-\[\d+ch\]/.test(dom))
+check('canonical present', /<link[^>]+rel="canonical"/.test(dom))
+check('JSON-LD present', /<script[^>]+type="application\/ld\+json"/.test(html))
+check(
+  'og image dimensions',
+  /<meta[^>]+property="og:image:width"/.test(dom) &&
+    /<meta[^>]+property="og:image:height"/.test(dom)
+)
 
 // Every external link opens safely.
-const targets = [...dom.matchAll(/<a [^>]*target="_blank"[^>]*>/g)]
+const targets = [...dom.matchAll(/<a[\s>][^>]*target="_blank"[^>]*>/g)]
 check(
   'every target=_blank has rel=noopener',
   targets.every((m) => m[0].includes('noopener'))
@@ -103,27 +136,47 @@ if (failures.length) {
   console.error('FAIL\n' + failures.map((f) => '  - ' + f).join('\n'))
   process.exit(1)
 }
-console.log(`verify: ${'all checks passed'}`)
+console.log('verify: all checks passed')
 ```
 
-- [ ] **Step 2: Run it against the current build to prove it passes today**
+- [ ] **Step 2: Add the npm script**
+
+Twelve tasks have to run this. In `package.json`, add to `scripts`, after `"lint"`:
+
+```json
+    "verify": "npm run verify"
+```
+
+- [ ] **Step 3: Prove it passes on a clean build**
 
 ```bash
-rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+rm -rf .next out && npm run build >/dev/null && npm run verify
 ```
 
 Expected: `verify: all checks passed`
 
-- [ ] **Step 3: Prove it actually fails when something breaks**
+- [ ] **Step 4: Prove each check can actually fail**
 
-Temporarily add a second `h1` to `app/page.tsx`, rebuild, run the script.
+A check that cannot fail is worse than no check. Mutate the **built output** in `out/` — never the source — and run `npm run verify` after each. Restore by rebuilding.
 
-Expected: `FAIL` listing `exactly one h1`. Revert the temporary change afterwards.
+Run all five of these and confirm each names the expected failure:
 
-- [ ] **Step 4: Commit**
+| Mutation to `out/` | Expected failure |
+|---|---|
+| Add `<h1>x</h1>` to `out/index.html` | `exactly one h1` |
+| Delete the `:focus-visible{outline:...}` rule from `out/_next/static/chunks/*.css`, leaving `main:focus-visible{outline:none}` | `global focus ring` |
+| Change `main:focus-visible{outline:none}` to `outline:3px solid red` | `main opts out of ring` |
+| Delete the real `<script type="application/ld+json">` from `<head>` | `JSON-LD present` |
+| Delete `<meta property="og:image:height">` from `<head>` | `og image dimensions` |
+
+The second and fourth are the whole point of this task: both passed silently under the earlier substring-based version.
+
+After the last mutation, rebuild clean and confirm `npm run verify` passes again.
+
+- [ ] **Step 5: Commit**
 
 ```bash
-git add scripts/verify.mjs
+git add scripts/verify.mjs package.json
 git commit -m "test: add build verification script"
 ```
 
@@ -198,7 +251,7 @@ At 58rem the wrapper is 928px: 208px sidebar plus 720px main, whose `md:px-10` l
 - [ ] **Step 4: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
 grep -c "max-w-\[58rem\]" app/layout.tsx
 ```
 
@@ -246,7 +299,7 @@ body {
 - [ ] **Step 2: Verify contrast is untouched**
 
 ```bash
-rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+rm -rf .next out && npm run build >/dev/null && npm run verify
 ```
 
 Expected: `verify: all checks passed`. The graticule sits on `body`; text sits on `--color-bg` surfaces above it.
@@ -573,7 +626,7 @@ In `app/page.tsx` replace the `Projects` import and `<Projects />` with `Studies
 - [ ] **Step 3: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
 node --input-type=module -e "
 import {readFileSync} from 'node:fs';
 const dom = readFileSync('out/index.html','utf8').replace(/<script[\s\S]*?<\/script>/g,'');
@@ -687,7 +740,7 @@ Now temporarily add one paper to `data/publications.ts`, rebuild, and confirm `i
 - [ ] **Step 3: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && npm run verify
 ```
 
 Expected: all clean.
@@ -781,7 +834,7 @@ In `app/page.tsx`, delete the `<h1 className="sr-only">…</h1>` block and its e
 - [ ] **Step 4: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
 ```
 
 Expected: `verify: all checks passed`, which includes `exactly one h1`.
@@ -906,7 +959,7 @@ git mv components/sections/EducationExperience.tsx components/sections/Education
 - [ ] **Step 5: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
 ```
 
 Expected: all clean.
@@ -974,7 +1027,7 @@ const NAV_ITEMS = [
 - [ ] **Step 3: Verify every nav target exists**
 
 ```bash
-rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+rm -rf .next out && npm run build >/dev/null && npm run verify
 node --input-type=module -e "
 import {readFileSync} from 'node:fs';
 const dom = readFileSync('out/index.html','utf8').replace(/<script[\s\S]*?<\/script>/g,'');
@@ -1091,7 +1144,7 @@ Add the import `import Image from 'next/image'` and place this immediately after
 - [ ] **Step 5: Verify**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify
 du -sh out
 ```
 
@@ -1123,7 +1176,7 @@ Expected: both print their "no stale" message.
 - [ ] **Step 2: Full verification**
 
 ```bash
-npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && node scripts/verify.mjs && du -sh out
+npm run lint && npx tsc --noEmit && rm -rf .next out && npm run build >/dev/null && npm run verify && du -sh out
 ```
 
 Expected: `verify: all checks passed`.

@@ -37,8 +37,9 @@ check(
 )
 
 // Anchors must never nest: the stretched-link pattern makes this easy to
-// break. The character class after `<a` also catches `<a>` and a newline.
-check('no nested anchors', !/<a[\s>][^>]*>(?:(?!<\/a>).)*<a[\s>]/s.test(dom))
+// break. `<a(?:\s[^>]*)?>` matches a bare `<a>` as the outer anchor too —
+// `<a[\s>]` would consume that tag's own `>` and then need a second one.
+check('no nested anchors', !/<a(?:\s[^>]*)?>(?:(?!<\/a>).)*<a[\s>]/s.test(dom))
 
 // Quality bar held since the 2026-09 audit.
 check('skip link present', dom.includes('Skip to content'))

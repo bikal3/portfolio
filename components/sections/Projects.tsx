@@ -18,17 +18,7 @@ export default function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-heading" className="py-12 border-b border-border-subtle">
       <SectionLabel id="projects-heading">Projects</SectionLabel>
-      <div className="relative">
-        {/*
-          A scrollable region must be reachable by keyboard (WCAG 2.1.1) and
-          needs an accessible name, so it gets `tabIndex` plus role/label.
-        */}
-        <div
-          role="region"
-          aria-label="Project list"
-          tabIndex={0}
-          className="scroll-area h-[60vh] min-h-[360px] max-h-[620px] overflow-y-auto overscroll-contain flex flex-col gap-4 pr-3 pb-6"
-        >
+      <div className="flex flex-col gap-4">
           {projects.map((project) => {
             // The card highlights on hover, so the whole card must be the
             // target. A stretched pseudo-element on the title link covers it
@@ -37,7 +27,7 @@ export default function Projects() {
             return (
             <div
               key={project.title}
-              className="group relative bg-surface border border-border-strong rounded-md p-4 shrink-0 transition-all hover:border-accent hover:bg-accent-bg focus-within:border-accent"
+              className="group relative bg-surface border border-border-strong rounded-md p-4 transition-all hover:border-accent hover:bg-accent-bg focus-within:border-accent"
             >
               <h3 className="text-text-strong text-base font-semibold mb-2">
                 {primary ? (
@@ -93,9 +83,6 @@ export default function Projects() {
             </div>
             )
           })}
-        </div>
-        {/* Fade hint that the list keeps going */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-bg to-transparent" />
       </div>
     </section>
   )

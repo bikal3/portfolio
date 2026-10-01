@@ -5,7 +5,8 @@
 // other two arrays have no optional fields, so inference is enough.
 interface Study {
   title: string
-  /** When the work was done, as 'MMM YYYY'. Drives the newest-first sort. */
+  /** When the work was done, as 'MMM YYYY'. Required: a card with no date
+      gives the reader no sense of recency. Drives the newest-first sort. */
   date: string
   description: string
   /** Map-sheet record. Any field left undefined is omitted from the table
@@ -24,7 +25,7 @@ const PROJECTS: Study[] = [
   {
     title: 'Rasuwa Transboundary Flood',
     date: 'Aug 2026',
-    region: 'Bhote Koshi–Trishuli, Rasuwa',
+    region: 'Bhote Koshi valley, Rasuwa',
     sensors: ['Sentinel-1 GRD', 'Sentinel-2 L2A', 'SRTM GL1 (30 m)'],
     period: 'Aug 2026',
     validation: 'HOT ground survey',
@@ -74,7 +75,7 @@ const PROJECTS: Study[] = [
     title: 'Peru Wildfire Dashboard',
     date: 'Mar 2025',
     region: 'Peru',
-    sensors: ['NASA FIRMS (MODIS + VIIRS)', 'MODIS MCD64A1', 'Sentinel-2 10 m LULC 2024'],
+    sensors: ['NASA FIRMS (MODIS Terra/Aqua)', 'MODIS MCD64A1', 'Sentinel-2 10 m LULC 2024'],
     period: '2000–2024',
     description:
       'Interactive dashboard visualizing 24 years (2000–2024) of wildfire activity across Peru using 32,000+ NASA FIRMS hotspots and MODIS burned area data. Features layer toggles for protected areas and indigenous territories, temporal trend analysis, regional fire rankings, and land governance breakdowns.',
@@ -96,7 +97,7 @@ const PROJECTS: Study[] = [
     title: 'MappingAfrica: Satellite Agricultural Field Segmentation',
     date: 'May 2025',
     region: 'Zambia',
-    validation: '81.79% pixel accuracy, 43.31% mIoU on the test split (MappingAfrica v2.0.0)',
+    validation: '81.79% pixel accuracy, 43.31% mIoU (n=50 test split)',
     description:
       'Implements semantic segmentation of farmland across Zambia using a UNet architecture trained on multi-spectral satellite imagery. Achieves 81.79% pixel accuracy and 43.31% mIoU on the MappingAfrica v2.0.0 dataset. Includes an interactive demo for running inference in the browser.',
     technologies: ['PyTorch', 'UNet', 'FastAPI', 'React', 'Vite', 'rasterio', 'NumPy'],

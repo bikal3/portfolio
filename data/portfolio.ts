@@ -1,8 +1,9 @@
 // data/portfolio.ts
 
-// Only `projects` needs a declared type: without it, TypeScript infers a union
-// where the entries missing `github` make `project.github` unreachable. The
-// other two arrays have no optional fields, so inference is enough.
+// `projects` needs a declared type: without it, TypeScript infers a union
+// where the entries missing `github` make `project.github` unreachable.
+// `teaching` and `priorExperience` share one shape, so that shape is declared
+// once as `Role`. `education` has no optional fields, so inference is enough.
 interface Study {
   title: string
   /** When the work was done, as 'MMM YYYY'. Required: a card with no date
@@ -156,7 +157,14 @@ export const education = [
   },
 ]
 
-export const experience = [
+interface Role {
+  role: string
+  organization: string
+  dates: string
+  bullets: string[]
+}
+
+export const teaching: Role[] = [
   {
     role: 'Senior Lecturer',
     organization: 'Softwarica College of IT and E-commerce',
@@ -168,6 +176,18 @@ export const experience = [
     ],
   },
   {
+    role: 'Teaching Assistant',
+    organization: 'Softwarica College of IT and E-commerce',
+    dates: 'June 2019 – July 2020',
+    bullets: [
+      'Supervised ~40 undergraduate students per semester on independent research projects',
+      'Mentored teams building hardware/software projects including an electric vehicle prototype',
+    ],
+  },
+]
+
+export const priorExperience: Role[] = [
+  {
     role: 'Data Analyst / Backend Developer',
     organization: 'Softwarica College of IT and E-commerce',
     dates: 'July 2020 – July 2021',
@@ -175,15 +195,6 @@ export const experience = [
       'Cleaned millions of records across 250 Moodle database tables using SQL and Tableau Prep',
       'Built executive, marketing, and performance dashboards in Tableau for institutional reporting',
       'Designed and shipped an Android app and REST APIs using Flutter and Node.js',
-    ],
-  },
-  {
-    role: 'Teaching Assistant',
-    organization: 'Softwarica College of IT and E-commerce',
-    dates: 'June 2019 – July 2020',
-    bullets: [
-      'Supervised ~40 undergraduate students per semester on independent research projects',
-      'Mentored teams building hardware/software projects including an electric vehicle prototype',
     ],
   },
   {

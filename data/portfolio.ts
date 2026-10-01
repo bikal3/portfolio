@@ -1,5 +1,15 @@
 // data/portfolio.ts
 
+// Figures captured from each live site by scripts/capture-figures.mjs.
+import rasuwaFigure from './figures/rasuwa-transboundary-flood.webp'
+import bhumiscanFigure from './figures/bhumiscan-earth-embedding-search-for-nepal.webp'
+import precipFigure from './figures/dual-branch-u-net-for-precipitation-downscaling.webp'
+import californiaFigure from './figures/california-wildfire-analysis-dashboard.webp'
+import peruFigure from './figures/peru-wildfire-dashboard.webp'
+import arboretumFigure from './figures/mapping-invasive-species-hadwen-arboretum.webp'
+import mappingAfricaFigure from './figures/mappingafrica-satellite-agricultural-field-segmentation.webp'
+import glofFigure from './figures/nepal-glof-explorer.webp'
+
 // `projects` needs a declared type: without it, TypeScript infers a union
 // where the entries missing `github` make `project.github` unreachable.
 // `teaching` and `priorExperience` share one shape, so that shape is declared
@@ -20,11 +30,14 @@ interface Study {
   technologies: string[]
   github?: string
   demo?: string
+  /** Screenshot of the live site, decorative. */
+  figure?: import('next/image').StaticImageData
 }
 
 const PROJECTS: Study[] = [
   {
     title: 'Rasuwa Transboundary Flood',
+    figure: rasuwaFigure,
     date: 'Aug 2026',
     region: 'Bhote Koshi valley, Rasuwa',
     sensors: ['Sentinel-1 GRD', 'Sentinel-2 L2A', 'SRTM GL1 (30 m)'],
@@ -38,6 +51,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'BhumiScan: Earth-Embedding Search for Nepal',
+    figure: bhumiscanFigure,
     date: 'Jul 2026',
     region: 'Nepal',
     sensors: ['Sentinel-1', 'Sentinel-2'],
@@ -50,6 +64,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Dual-Branch U-Net for Precipitation Downscaling',
+    figure: precipFigure,
     date: 'Jan 2026',
     region: 'Big Island of Hawaiʻi',
     sensors: ['NASA IMERG Early Run V07B', 'GOES-17 BCM', 'SRTM DEM (30 m)', 'HCDP rain gauges (~165)'],
@@ -62,6 +77,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'California Wildfire Analysis Dashboard',
+    figure: californiaFigure,
     date: 'Nov 2024',
     region: 'California',
     sensors: ['MTBS (USGS)', 'ERA5 (via Open-Meteo)'],
@@ -74,6 +90,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Peru Wildfire Dashboard',
+    figure: peruFigure,
     date: 'Mar 2025',
     region: 'Peru',
     sensors: ['NASA FIRMS (MODIS Terra/Aqua)', 'MODIS MCD64A1', 'Sentinel-2 10 m LULC 2024'],
@@ -86,6 +103,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Mapping Invasive Species: Hadwen Arboretum',
+    figure: arboretumFigure,
     date: 'Nov 2025',
     region: 'Hadwen Arboretum, Worcester, MA',
     description:
@@ -96,6 +114,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'MappingAfrica: Satellite Agricultural Field Segmentation',
+    figure: mappingAfricaFigure,
     date: 'May 2025',
     region: 'Zambia',
     validation: '81.79% pixel accuracy, 43.31% mIoU (n=50 test split)',
@@ -107,6 +126,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Nepal GLOF Explorer',
+    figure: glofFigure,
     date: 'Dec 2023',
     region: 'Nepal Himalaya',
     description:

@@ -1,4 +1,5 @@
 // components/sections/Studies.tsx
+import Image from 'next/image'
 import SectionLabel from '@/components/ui/SectionLabel'
 import RecordTable, { type Row } from '@/components/ui/RecordTable'
 import { ExternalIcon, GitHubIcon } from '@/components/ui/icons'
@@ -48,6 +49,14 @@ function StudyEntry({ study }: { study: Study }) {
           study.title
         )}
       </h4>
+      {study.figure && (
+        <Image
+          src={study.figure}
+          alt=""
+          sizes="640px"
+          className="mt-3 w-full rounded border border-border-strong"
+        />
+      )}
       <p className="text-text-body mt-2">{study.description}</p>
       <div className="mt-4">
         <RecordTable rows={recordRows(study)} />

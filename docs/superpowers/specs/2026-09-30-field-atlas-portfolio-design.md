@@ -67,6 +67,33 @@ Note the maximum is **not** width-independent -- it measured 85 at 53rem and 81
 at 51rem, tracking the column down. Do not cite a fixed ceiling as a reason to
 widen anything back.
 
+**Superseded 2026-10-01: the desktop cap is now `70%`, by explicit request.**
+The measured consequence, same rendered-line method, prose paragraphs only:
+
+| Viewport | Wrapper | Content | Mean chars | Range |
+|---------:|--------:|--------:|-----------:|------:|
+| 767px (mobile layout) | 544px | 504px | 63.3 | 11-76 |
+| 768px (sidebar appears) | 538px | 250px | **32.6** | 6-42 |
+| 1024px | 717px | 429px | 54.7 | 10-69 |
+| 1280px | 896px | 608px | 75.1 | 17-95 |
+| 1440px | 1008px | 720px | 87.3 | 10-109 |
+| 1920px | 1344px | 1056px | **124.2** | 10-162 |
+
+A percentage cap and a bounded measure are in direct conflict: the percentage
+keeps growing with the monitor, and reading comfort does not. Only ~1280px
+lands inside 45-75. Two specific costs, both measured, neither hypothetical:
+
+1. **A cliff at the breakpoint.** Crossing 767px to 768px halves the line
+   length, 63.3 to 32.6, because the 208px sidebar arrives while the wrapper
+   simultaneously shrinks from 34rem to 70% of 768px. The narrowest desktop
+   column is now by far the worst on the page.
+2. **No ceiling.** At 1920px prose runs at 124 characters, 65% over the target.
+
+Kept anyway because it was asked for. If it is ever revisited, clamping is the
+fix -- `md:w-[70%]` with a floor and ceiling -- but note that a clamp tight
+enough to hold 45-75 is a fixed width for almost every real viewport, so the
+honest choice is between a percentage and a measure, not a blend of them.
+
 For reference if it is ever revisited: 53rem measures 79.3, and extrapolating
 the measured slope of ~0.1 characters per pixel puts 50rem near 74.6. Raising
 the body size from 12-14px to 16px does most of the work; the column then

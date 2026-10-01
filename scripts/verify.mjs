@@ -71,10 +71,19 @@ check(
   'body keeps its background colour',
   rules.filter((r) => r.selectors.includes('body')).some((r) => /background-color\s*:/.test(r.body))
 )
+const classAttrs = [...dom.matchAll(/class="([^"]*)"/g)].map((m) => m[1])
 check(
   'page wrapper is opaque',
-  /class="[^"]*\bbg-bg\b[^"]*max-w-\[51rem\]|class="[^"]*max-w-\[51rem\][^"]*\bbg-bg\b/.test(dom)
+  classAttrs.some(
+    (c) => /\bmin-h-screen\b/.test(c) && /\bbg-bg\b/.test(c) && /\bmax-w-\[/.test(c)
+  )
 )
+
+// The desktop theme toggle is fixed and aligns to the content's right edge, so
+// its wrapper has to span exactly what the page wrapper spans. Nothing enforced
+// that before, and the two were only ever kept equal by hand.
+const desktopCaps = [...new Set(dom.match(/md:max-w-\[[^\]]+\]/g) ?? [])]
+check('one desktop column width', desktopCaps.length === 1)
 check('canonical present', /<link[^>]+rel="canonical"/.test(dom))
 check('JSON-LD present', /<script[^>]+type="application\/ld\+json"/.test(html))
 check(

@@ -16,7 +16,7 @@ export default function Teaching() {
             <ul className="flex flex-col gap-1.5 mt-3">
               {item.bullets.map((b) => (
                 <li key={b} className="flex gap-2 text-text-body">
-                  <span className="text-accent shrink-0">›</span>
+                  <span aria-hidden="true" className="text-accent shrink-0">›</span>
                   {b}
                 </li>
               ))}

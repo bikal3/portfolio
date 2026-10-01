@@ -10,9 +10,13 @@ import { profile } from '@/data/profile'
 import { GitHubIcon, LinkedInIcon } from '@/components/ui/icons'
 import ThemeToggle from '@/components/ThemeToggle'
 
+// Publications and Thesis are deliberately absent: they render nothing while
+// their data is empty, and a nav link to a section that does not exist is a
+// dead anchor.
 const NAV_ITEMS = [
-  { id: 'about', label: 'About' },
-  { id: 'projects', label: 'Projects' },
+  { id: 'research', label: 'Research' },
+  { id: 'studies', label: 'Studies' },
+  { id: 'teaching', label: 'Teaching' },
   { id: 'experience', label: 'Experience' },
   { id: 'education', label: 'Education' },
   { id: 'contact', label: 'Contact' },

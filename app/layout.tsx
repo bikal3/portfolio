@@ -119,7 +119,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="max-w-[51rem] mx-auto flex min-h-screen bg-bg">
+        <div className="max-w-[34rem] md:max-w-[51rem] mx-auto flex min-h-screen bg-bg">
           <Navbar />
           <main
             id="main-content"
@@ -138,7 +138,7 @@ export default function RootLayout({
           wide screen. The wrapper ignores pointer events so it does not sit
           over the content it spans.
         */}
-        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden max-w-[51rem] justify-end px-10 md:flex">
+        <div className="pointer-events-none fixed inset-x-0 top-5 z-50 mx-auto hidden md:max-w-[51rem] justify-end px-10 md:flex">
           <ThemeToggle className="pointer-events-auto block" />
         </div>
       </body>

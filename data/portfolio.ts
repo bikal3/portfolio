@@ -27,7 +27,6 @@ interface Study {
   sensors?: string[]
   period?: string
   validation?: string
-  technologies: string[]
   github?: string
   demo?: string
   /** Screenshot of the live site, decorative. */
@@ -45,7 +44,6 @@ const PROJECTS: Study[] = [
     validation: 'HOT ground survey',
     description:
       'Multi-sensor change detection and a terrain-derived flood corridor for the 26 August 2026 Bhote Koshi–Trishuli glacial flood in Rasuwa, Nepal. Validated against the Humanitarian OpenStreetMap Team ground survey and published as a public information site.',
-    technologies: ['Google Earth Engine', 'Sentinel-1/2', 'Python', 'React', 'SRTM', 'Cloudflare Pages'],
     github: 'https://github.com/bikal3/rasuwa-flood',
     demo: 'https://rasuwaflood.bikal3.com.np',
   },
@@ -59,7 +57,6 @@ const PROJECTS: Study[] = [
     validation: '73.7% macro precision@10 (ESA WorldCover labels)',
     description:
       'Country-scale visual search over Nepal’s landscape. Click any location (a glacial lake, a terraced hillside) and retrieve the most similar places nationwide from 22,676 Clay v1.5 Sentinel-2 embedding cells. Detects 2020→2025 land change scored by cloud-penetrating Sentinel-1 radar, so monsoon haze cannot fake a hotspot, with a cloud-free before/after imagery swipe. Scores 73.7% macro precision@10 against ESA WorldCover labels, a 5.9× lift over the random baseline, and runs entirely client-side with no backend or vector database.',
-    technologies: ['Next.js', 'TypeScript', 'MapLibre GL', 'Clay v1.5', 'Sentinel-1/2', 'DuckDB', 'Python', 'Cloudflare R2'],
     demo: 'https://bhumiscan.bikal3.com.np/',
   },
   {
@@ -71,7 +68,6 @@ const PROJECTS: Study[] = [
     period: '2020–Jun 2021',
     description:
       'Enhances NASA IMERG precipitation estimates from 10 km to 250 m resolution over Hawaii using a dual-branch CNN that fuses satellite imagery with topographic data. Enables finer-grained rainfall mapping for hydrological and climate applications.',
-    technologies: ['PyTorch', 'Python', 'NASA IMERG', 'Google Earth Engine', 'Jupyter', 'DEM'],
     github: 'https://github.com/bikal3/dual-branch-unet-precip',
     demo: 'https://bikal3.github.io/dual-branch-unet-precip/',
   },
@@ -84,7 +80,6 @@ const PROJECTS: Study[] = [
     period: '1984–2022',
     description:
       'Interactive dashboard covering 38 years (1984–2022) of California wildfire history derived from MTBS satellite imagery and climate records. Enables exploration of burn extent, severity trends, and climate correlations across the state.',
-    technologies: ['Plotly', 'Leaflet', 'Pandas', 'Python', 'MTBS/USGS', 'Docker'],
     github: 'https://github.com/bikal3/mtbs_wildfires',
     demo: 'https://mtbs-wildfires.bikal3.com.np/',
   },
@@ -97,7 +92,6 @@ const PROJECTS: Study[] = [
     period: '2000–2024',
     description:
       'Interactive dashboard visualizing 24 years (2000–2024) of wildfire activity across Peru using 32,000+ NASA FIRMS hotspots and MODIS burned area data. Features layer toggles for protected areas and indigenous territories, temporal trend analysis, regional fire rankings, and land governance breakdowns.',
-    technologies: ['Next.js', 'MapLibre GL', 'Recharts', 'Python', 'GeoPandas', 'scikit-learn', 'NASA FIRMS', 'MODIS'],
     github: 'https://github.com/bikal3/peru-wildfire',
     demo: 'https://bikal3.github.io/peru-wildfire/',
   },
@@ -108,7 +102,6 @@ const PROJECTS: Study[] = [
     region: 'Hadwen Arboretum, Worcester, MA',
     description:
       'Interactive web app presenting a GIS-based survey of invasive plants across 26 acres of the Hadwen Arboretum in Worcester, MA. Reveals that 42.6% of the arboretum contains at least one invasive species, with five-chapter narrative storytelling, species density maps, a threat index, and a management effort estimator.',
-    technologies: ['Python', 'Flask', 'Chart.js', 'Jupyter', 'pandas', 'GIS', 'JavaScript'],
     github: 'https://github.com/bikal3/arboretum-invasive-species',
     demo: 'https://arboretum-invasive-species.onrender.com',
   },
@@ -120,7 +113,6 @@ const PROJECTS: Study[] = [
     validation: '81.79% pixel accuracy, 43.31% mIoU (n=50 test split)',
     description:
       'Implements semantic segmentation of farmland across Zambia using a UNet architecture trained on multi-spectral satellite imagery. Achieves 81.79% pixel accuracy and 43.31% mIoU on the MappingAfrica v2.0.0 dataset. Includes an interactive demo for running inference in the browser.',
-    technologies: ['PyTorch', 'UNet', 'FastAPI', 'React', 'Vite', 'rasterio', 'NumPy'],
     github: 'https://github.com/bikal3/mappingafrica-unet',
     demo: 'https://bikal3.github.io/mappingafrica-unet/',
   },
@@ -131,7 +123,6 @@ const PROJECTS: Study[] = [
     region: 'Nepal Himalaya',
     description:
       'Maps glacial lake outburst flood (GLOF) hazard across the Nepal Himalaya, tracking 25 glacial lakes from 2000 to 2024. Combines ML-based risk classification with satellite change detection to support early warning and disaster preparedness.',
-    technologies: ['scikit-learn', 'Google Earth Engine', 'Leaflet', 'Sentinel-2', 'Landsat', 'Python'],
     github: 'https://github.com/bikal3/himalaya-glof',
     demo: 'https://himalayaglof.bikal3.com.np/',
   },

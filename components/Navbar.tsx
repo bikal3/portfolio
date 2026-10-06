@@ -199,11 +199,20 @@ export default function Navbar() {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeMenu()
     }
+    // The drawer and the only button that closes it are both `md:hidden`, so
+    // crossing the breakpoint with the menu open -- rotating a phone is enough
+    // -- used to leave the page scroll-locked and `inert` with nothing visible
+    // to dismiss. setMenuOpen, not closeMenu: the toggle it would focus is
+    // display:none at this width, which would strand focus.
+    const desktop = window.matchMedia('(min-width: 768px)')
+    const onBreakpoint = () => desktop.matches && setMenuOpen(false)
     document.addEventListener('keydown', onKeyDown)
+    desktop.addEventListener('change', onBreakpoint)
     return () => {
       document.body.classList.remove('menu-open')
       covered?.removeAttribute('inert')
       document.removeEventListener('keydown', onKeyDown)
+      desktop.removeEventListener('change', onBreakpoint)
     }
   }, [menuOpen, closeMenu])
 

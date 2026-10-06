@@ -146,20 +146,40 @@ export default function Navbar() {
   // sections to highlight, so there is nothing for an effect to reset.
   const active = isHome ? activeSection : null
 
+  // A line a quarter of the way down the viewport decides the active section:
+  // the last one whose top has passed it. This replaced an IntersectionObserver
+  // band, which highlighted the wrong item for four of the six sections -- a
+  // band thinner than a section is only ever reported mid-scroll, and the
+  // callback receives the entries that *changed*, so picking the first
+  // intersecting one in a partial batch is not the same as picking the one
+  // under the line.
   useEffect(() => {
     if (!isHome) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.find((e) => e.isIntersecting)
-        if (hit) setActiveSection(hit.target.id as NavId)
-      },
-      { rootMargin: '-40% 0px -55% 0px' }
-    )
-    NAV_ITEMS.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
+    const onScroll = () => {
+      const line = window.innerHeight * 0.25
+      // At the foot of the page the last section can no longer reach the line
+      // -- only ~130px of the document sits below Contact -- so without this it
+      // could never light up at all.
+      // ponytail: Education and Contact share that final screen, so clicking
+      // Education there still reads Contact. Inherent to any line-based spy
+      // once the page runs out of scroll; fixable only by padding the foot of
+      // the page, which is not worth distorting the layout for.
+      const atBottom =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+      let current: NavId | null = null
+      for (const { id } of NAV_ITEMS) {
+        const top = document.getElementById(id)?.getBoundingClientRect().top
+        if (top !== undefined && top <= line) current = id
+      }
+      setActiveSection(atBottom ? NAV_ITEMS[NAV_ITEMS.length - 1].id : current)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [isHome])
 
   const closeMenu = useCallback(() => {

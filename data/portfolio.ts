@@ -150,11 +150,15 @@ export const projects: Study[] = [...PROJECTS].sort(
   (a, b) => monthKey(b.date) - monthKey(a.date)
 )
 
+// Years only, and the same granularity for all three: the months for the
+// older two degrees are not on record here, and a CV list that states them
+// for one entry and not the others reads as missing data rather than as a
+// difference in precision. The CV PDF carries the exact dates.
 export const education = [
   {
     degree: 'MS in Geographic Information Science',
     institution: 'Clark University',
-    dates: 'Aug 2024 – May 2026',
+    dates: '2024 – 2026',
   },
   {
     degree: 'MS in Data Analytics',

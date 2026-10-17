@@ -1,5 +1,4 @@
 // components/sections/Studies.tsx
-import Image from 'next/image'
 import SectionLabel from '@/components/ui/SectionLabel'
 import RecordTable, { type Row } from '@/components/ui/RecordTable'
 import { ExternalIcon, GitHubIcon } from '@/components/ui/icons'
@@ -50,11 +49,21 @@ function StudyEntry({ study }: { study: Study }) {
         )}
       </h4>
       {study.figure && (
-        <Image
-          src={study.figure}
+        // A plain img: next/image emits no srcset under `images.unoptimized`
+        // and rejects a hand-written one. sizes mirrors the layout: below md
+        // the 34rem column minus px-5; above it 70vw minus the w-52 sidebar
+        // and px-10.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={study.figure.full.src}
+          srcSet={`${study.figure.small.src} 800w, ${study.figure.full.src} 1200w`}
+          sizes="(min-width: 768px) calc(70vw - 288px), min(calc(100vw - 40px), 504px)"
+          width={study.figure.full.width}
+          height={study.figure.full.height}
           alt=""
-          sizes="640px"
-          className="mt-3 w-full rounded border border-border-strong"
+          loading="lazy"
+          decoding="async"
+          className="mt-3 w-full h-auto rounded border border-border-strong"
         />
       )}
       <p className="text-text-body mt-2">{study.description}</p>

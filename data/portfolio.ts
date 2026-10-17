@@ -1,14 +1,23 @@
 // data/portfolio.ts
 
-// Figures captured from each live site by scripts/capture-figures.mjs.
+// Figures captured from each live site by scripts/capture-figures.mjs, each
+// with an 800px copy for phones and laptops.
 import rasuwaFigure from './figures/rasuwa-transboundary-flood.webp'
+import rasuwaFigure800 from './figures/rasuwa-transboundary-flood-800.webp'
 import bhumiscanFigure from './figures/bhumiscan-earth-embedding-search-for-nepal.webp'
+import bhumiscanFigure800 from './figures/bhumiscan-earth-embedding-search-for-nepal-800.webp'
 import precipFigure from './figures/dual-branch-u-net-for-precipitation-downscaling.webp'
+import precipFigure800 from './figures/dual-branch-u-net-for-precipitation-downscaling-800.webp'
 import californiaFigure from './figures/california-wildfire-analysis-dashboard.webp'
+import californiaFigure800 from './figures/california-wildfire-analysis-dashboard-800.webp'
 import peruFigure from './figures/peru-wildfire-dashboard.webp'
+import peruFigure800 from './figures/peru-wildfire-dashboard-800.webp'
 import arboretumFigure from './figures/mapping-invasive-species-hadwen-arboretum.webp'
+import arboretumFigure800 from './figures/mapping-invasive-species-hadwen-arboretum-800.webp'
 import mappingAfricaFigure from './figures/mappingafrica-satellite-agricultural-field-segmentation.webp'
+import mappingAfricaFigure800 from './figures/mappingafrica-satellite-agricultural-field-segmentation-800.webp'
 import glofFigure from './figures/nepal-glof-explorer.webp'
+import glofFigure800 from './figures/nepal-glof-explorer-800.webp'
 
 // `projects` needs a declared type: without it, TypeScript infers a union
 // where the entries missing `github` make `project.github` unreachable.
@@ -29,14 +38,17 @@ interface Study {
   validation?: string
   github?: string
   demo?: string
-  /** Screenshot of the live site, decorative. */
-  figure?: import('next/image').StaticImageData
+  /** Screenshot of the live site, decorative: 1200px and an 800px copy. */
+  figure?: {
+    full: import('next/image').StaticImageData
+    small: import('next/image').StaticImageData
+  }
 }
 
 const PROJECTS: Study[] = [
   {
     title: 'Rasuwa Transboundary Flood',
-    figure: rasuwaFigure,
+    figure: { full: rasuwaFigure, small: rasuwaFigure800 },
     date: 'Aug 2026',
     region: 'Bhote Koshi valley, Rasuwa',
     sensors: ['Sentinel-1 GRD', 'Sentinel-2 L2A', 'SRTM GL1 (30 m)'],
@@ -49,7 +61,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'BhumiScan: Earth-Embedding Search for Nepal',
-    figure: bhumiscanFigure,
+    figure: { full: bhumiscanFigure, small: bhumiscanFigure800 },
     date: 'Jul 2026',
     region: 'Nepal',
     sensors: ['Sentinel-1', 'Sentinel-2'],
@@ -61,7 +73,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Dual-Branch U-Net for Precipitation Downscaling',
-    figure: precipFigure,
+    figure: { full: precipFigure, small: precipFigure800 },
     date: 'Jan 2026',
     region: 'Big Island of Hawaiʻi',
     sensors: ['NASA IMERG Early Run V07B', 'GOES-17 BCM', 'SRTM DEM (30 m)', 'HCDP rain gauges (~165)'],
@@ -73,7 +85,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'California Wildfire Analysis Dashboard',
-    figure: californiaFigure,
+    figure: { full: californiaFigure, small: californiaFigure800 },
     date: 'Nov 2024',
     region: 'California',
     sensors: ['MTBS (USGS)', 'ERA5 (via Open-Meteo)'],
@@ -85,7 +97,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Peru Wildfire Dashboard',
-    figure: peruFigure,
+    figure: { full: peruFigure, small: peruFigure800 },
     date: 'Mar 2025',
     region: 'Peru',
     sensors: ['NASA FIRMS (MODIS Terra/Aqua)', 'MODIS MCD64A1', 'Sentinel-2 10 m LULC 2024'],
@@ -97,7 +109,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Mapping Invasive Species: Hadwen Arboretum',
-    figure: arboretumFigure,
+    figure: { full: arboretumFigure, small: arboretumFigure800 },
     date: 'Nov 2025',
     region: 'Hadwen Arboretum, Worcester, MA',
     description:
@@ -107,7 +119,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'MappingAfrica: Satellite Agricultural Field Segmentation',
-    figure: mappingAfricaFigure,
+    figure: { full: mappingAfricaFigure, small: mappingAfricaFigure800 },
     date: 'May 2025',
     region: 'Zambia',
     validation: '81.79% pixel accuracy, 43.31% mIoU (n=50 test split)',
@@ -118,7 +130,7 @@ const PROJECTS: Study[] = [
   },
   {
     title: 'Nepal GLOF Explorer',
-    figure: glofFigure,
+    figure: { full: glofFigure, small: glofFigure800 },
     date: 'Dec 2023',
     region: 'Nepal Himalaya',
     description:

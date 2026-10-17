@@ -10,7 +10,10 @@ import { mkdirSync, readFileSync } from 'node:fs'
 
 // require, not import: ESM resolution ignores NODE_PATH, and playwright is not
 // a dependency of this project on purpose.
-const { chromium } = createRequire(import.meta.url)('playwright')
+const require = createRequire(import.meta.url)
+const { chromium } = require('playwright')
+// sharp ships with next, so it resolves from this project's node_modules.
+const sharp = require('sharp')
 
 // Read the demo URLs out of the data file as text. Importing the module would
 // need a TypeScript loader, which is not worth wiring up for a one-off script.
@@ -34,7 +37,10 @@ for (const study of projects) {
     // tour). Harmless on the sites that have none.
     await page.keyboard.press('Escape')
     await page.waitForTimeout(1000)
-    await page.screenshot({ path: `data/figures/${slug}.webp`, quality: 80, type: 'webp' })
+    const path = `data/figures/${slug}.webp`
+    await page.screenshot({ path, quality: 80, type: 'webp' })
+    // The srcset in Studies.tsx pairs this 800w copy with the 1200w original.
+    await sharp(path).resize(800).webp({ quality: 80 }).toFile(`data/figures/${slug}-800.webp`)
     console.log('captured', slug)
   } catch (error) {
     console.error('skipped', slug, '-', error.message)

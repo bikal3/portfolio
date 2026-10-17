@@ -63,7 +63,7 @@ Sections in DOM order, which is also nav order so scroll-spy stays honest:
 | `data/portfolio.ts` | Studies, teaching, prior experience, education |
 | `data/publications.ts` | Papers and thesis (ships empty, see below) |
 | `data/profile.ts` | Email, GitHub, LinkedIn, CV path - the only copy |
-| `data/figures/` | One screenshot per study, WebP |
+| `data/figures/` | One screenshot per study, WebP, plus an 800px `-800` copy |
 | `docs/superpowers/` | Design spec and implementation plan |
 | `scripts/verify.mjs` | The quality-bar checks |
 | `scripts/capture-figures.mjs` | One-off figure capture, not a dependency |
